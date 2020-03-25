@@ -1,7 +1,5 @@
 BasicUpstart2(start)
 
-/* Swaps the values at 2 memory locations $0380,$0381 */
-
 *=$1000
 
 start:

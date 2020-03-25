@@ -1,11 +1,5 @@
 BasicUpstart2(start)
 
-/* 
-    Pushes down the values at 5 memory locations $0380 - $0384 
-    ie 
-    1,2,3,4,5 -> 5,1,2,3,4
-*/
-
 *=$1000
 
 start:
