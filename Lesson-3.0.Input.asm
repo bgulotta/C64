@@ -18,8 +18,8 @@ input:
     cmp #$3a
     bcs input // branch if a > 9
     jsr $FFD2
-    jmp input
     and #$0f
+    jmp input
  out:    
     rts
 text:   
