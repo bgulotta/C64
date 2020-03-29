@@ -12,13 +12,13 @@ setup_irq:
     //lda $dd0d   // cancel all CIA-IRQs in queue/unprocessed
 
     // listen for raster beam events
-    lda #enable_raster    
-    sta irq_enable
+    lda #$01
+    sta intrpt_ctrl
 
     // set bit indicating screen has completed cycle to 0
-    lda rstr_cycle   
+    lda vic_ctrl_reg   
     and #$7f    
-    sta rstr_cycle 
+    sta vic_ctrl_reg 
 
     // trigger first interrupt at row zero
     lda #$00    
@@ -52,9 +52,8 @@ reset_irq:
 
 // custom interrupt routine
 irq:
-    // acknowledge we handled this interrupt by clearing the flag. this
-    // will ensure the next cycle will get triggered
-    dec irq_ack      
+    // acknowledge the raster interrupt
+    dec intrpt_sts      
     jsr color_wash  
     jmp (irq_beg_sav)
 
