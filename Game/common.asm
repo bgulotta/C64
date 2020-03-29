@@ -27,10 +27,18 @@
 .const irq_end_sav      = $03a1
 .const irq_beg          = $0314
 .const irq_end          = $0315
-
 .const scr_cols         = 40
 .const scr_rows         = 25
 
 // Enumerations for colors, ascii codes
 .enum { black, white }
 .enum { space = $20 }
+
+.const tlen = 14
+.const clen = 18
+.const xpos_c = scr_cols/2 - clen/2
+.const xpos_t = scr_cols/2 - tlen/2
+.const ypos_t = scr_cols * 12
+.const ypos_c = scr_cols * 13
+.const copyright_offset = xpos_c + ypos_c
+.const title_offset = xpos_t + ypos_t

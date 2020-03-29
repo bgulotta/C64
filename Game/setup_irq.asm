@@ -5,12 +5,11 @@
 setup_irq:
     sei
 
-    //ldy #$7f    // $7f = %01111111
-    //sty $dc0d   // Turn off CIAs Timer interrupts
-    //sty $dd0d   // Turn off CIAs Timer interrupts
-    //lda $dc0d   // cancel all CIA-IRQs in queue/unprocessed
-    //lda $dd0d   // cancel all CIA-IRQs in queue/unprocessed
-
+    
+    ldy #$7f    // $7f = %01111111
+    sty $dc0d   // Turn off CIAs Timer interrupts
+    sty $dd0d   // Turn off CIAs Timer interrupts
+    
     // listen for raster beam events
     lda #$01
     sta intrpt_ctrl
@@ -52,8 +51,12 @@ reset_irq:
 
 // custom interrupt routine
 irq:
-    // acknowledge the raster interrupt
-    dec intrpt_sts      
+   
     jsr color_wash  
+    jsr $1006
+
+    // acknowledge the raster interrupt
+    dec intrpt_sts  
+ 
     jmp (irq_beg_sav)
 

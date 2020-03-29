@@ -9,20 +9,31 @@ init_title_screen:
 title_screen()
 
 .macro title_screen() {
-    .const tlen = 14
-    .const xpos = scr_cols/2 - tlen/2
-    .const ypos = scr_cols * 12
     ldx #0
-print:
+loop_t:
     lda title, x
     cmp #$ff
-    beq exit
-    sta scr_ram + xpos + ypos, x
+    beq print_copyright
+    sta scr_ram + title_offset, x
     inx 
-    jmp print
+    jmp loop_t 
+print_copyright:
+    ldx #0
+loop_c:    
+    lda copyright, x
+    cmp #$ff
+    beq exit
+    sta scr_ram + copyright_offset, x
+    inx 
+    jmp loop_c
 exit:
     rts
+
 title: 
     .text "awesomest game"
     .byte $ff
+copyright:
+    .text "2020 gulotta games"
+    .byte $ff
+
 } 
