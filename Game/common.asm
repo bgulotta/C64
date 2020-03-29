@@ -34,11 +34,7 @@
 .enum { black, white }
 .enum { space = $20 }
 
-.const tlen = 14
-.const clen = 18
-.const xpos_c = scr_cols/2 - clen/2
-.const xpos_t = scr_cols/2 - tlen/2
-.const ypos_t = scr_cols * 12
-.const ypos_c = scr_cols * 13
-.const copyright_offset = xpos_c + ypos_c
-.const title_offset = xpos_t + ypos_t
+// Game constants
+.const intro_music_start = $1006
+.const copyright_offset = scr_cols/2 - 9 + scr_cols * 13
+.const title_offset = scr_cols/2 - 7 + scr_cols * 12

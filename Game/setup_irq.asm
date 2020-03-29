@@ -53,7 +53,7 @@ reset_irq:
 irq:
    
     jsr color_wash  
-    jsr $1006
+    jsr intro_music_start
 
     // acknowledge the raster interrupt
     dec intrpt_sts  
