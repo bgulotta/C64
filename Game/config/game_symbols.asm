@@ -18,6 +18,6 @@ spritey:            .byte $78, $58, $00, $00, $00, $00, $00, $00
 spritemsb:          .byte $00, $01, $00, $00, $00, $00, $00, $00
 spritecolormenable: .byte $01, $01, $00, $00, $00, $00, $00, $00
 spritecolor:        .byte $00, $0b, $00, $00, $00, $00, $00, $00
-spritecolorm1:      .byte $08, $08, $00, $00, $00, $00, $00, $00
-spritecolorm2:      .byte $0a, $0a, $00, $00, $00, $00, $00, $00
+spritecolormulti1:  .byte $08
+spritecolormulti2:  .byte $0a
 

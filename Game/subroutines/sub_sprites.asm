@@ -22,13 +22,13 @@ setup_sprites_loop:
     sta vic_spr_color, x
 
     // set sprite multi color 1
-    lda spritecolorm1, x
-    sta vic_spr_colorm1, x
+    lda spritecolormulti1
+    sta vic_spr_colorm1
     
     // set sprite multi color 2
-    lda spritecolorm2, x
-    sta vic_spr_colorm2, x
-
+    lda spritecolormulti2
+    sta vic_spr_colorm2
+    
     // turn on sprites
     lda spriteon, x
     cmp #$01
