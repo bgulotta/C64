@@ -1,0 +1,30 @@
+#importonce
+.const vic_scr_ram          = $0400 // 1000 addresses each contains a byte 256 possible characters.
+.const vic_spr_xpos         = $d000
+.const vic_spr_ypos         = $d001
+.const vic_spr_xpos_msb     = $d010
+.const vic_ctrl_reg         = $d011 // VIC-II control register 1; bit 0-2 yscroll; bit 3 high 25 row mode, low 24 row mode; bit 7 raster register cycle complete; 
+.const vic_rstr_reg         = $d012 // VIC-II raster register;
+.const vic_spr_enble_reg    = $d015 // VIC-II sprite enable register
+.const vic_ctrl_reg2        = $d016 // VIC-II control register 2; bit 4 high turns on multi-color mode; bit 3 low turns on 38 column mode 
+.const vic_mem_setup_reg    = $d018 // contains byte. bits 7-4 control scr_ram location
+                                  // contains byte. bits 3-1 control where your 2k byte character set is located
+.const vic_spr_multi_mode   = $d01c // Sprite multi color mode register
+.const vic_bdr_color        = $d020 // border color
+.const vic_bg_color         = $d021 // background (screen) color; in hi-res mode characters 0 bits have this color; in multi-color mode characters 00 bit pairs have this color
+.const vic_bg_color_2       = $d022 // background color 2; in multi-color mode characters 01 bit pairs have this color
+.const vic_bg_color_3       = $d023 // background color 3; in multi-color mode characters 10 bit pairs have this color
+.const vic_spr_colorm1      = $d025
+.const vic_spr_colorm2      = $d026
+.const vic_spr_color        = $d027
+.const vic_clr_ram          = $d800 // 1000 addresses each contains a nybble 16 possible colors; in multi-color mode characters 11 bit pairs have this color (specified by the lower 3 bits) 
+.const vic_bnk_sel          = $dd00 // contains a byte first 2 bits control which bank the VIC-II is looking at
+.const vic_bnk_swtch_on     = $dd02 // turning on bits 0,1 ORA 3 enables VIC-II bank switching
+.const vic_bnk_0            = $0000 // pointer to VIC-II bank 0: 16k bytes video memory
+.const vic_bnk_1            = $4000 // pointer to VIC-II bank 1: 16k bytes video memory
+.const vic_bnk_2            = $8000 // pointer to VIC-II bank 2: 16k bytes video memory
+.const vic_bnk_3            = $C000 // pointer to VIC-II bank 3: 16k bytes video memory
+.const vic_intrpt_ctrl      = $d01a 
+.const vic_intrpt_sts       = $d019
+.const vic_irq_beg          = $0314
+.const vic_irq_end          = $0315

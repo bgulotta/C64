@@ -1,18 +1,20 @@
 #importonce
-#import "common.asm"
-#import "sub_color_wash.asm"
+#import "../config/symbols.asm"
+#import "../config/game_symbols.asm"
+#import "../subroutines/sub_sprites.asm"
+#import "../subroutines/color_wash.asm"
+#import "../subroutines/sub_input.asm"
 
 setup_irq:
     sei
 
-    
     ldy #$7f    // $7f = %01111111
     sty $dc0d   // Turn off CIAs Timer interrupts
     sty $dd0d   // Turn off CIAs Timer interrupts
     
     // listen for raster beam events
     lda #$01
-    sta intrpt_ctrl
+    sta vic_intrpt_ctrl
 
     // set bit indicating screen has completed cycle to 0
     lda vic_ctrl_reg   
@@ -21,20 +23,20 @@ setup_irq:
 
     // trigger first interrupt at row zero
     lda #$00    
-    sta rstr_reg
+    sta vic_rstr_reg
 
     // store original irq address so we can set things
     // back to their original state via the indirect address
-    lda irq_beg
+    lda vic_irq_beg
     sta irq_beg_sav
-    lda irq_end
+    lda vic_irq_end
     sta irq_end_sav
 
     // point 0314 to our custom interrupt code irq
     lda #<irq
-    sta irq_beg
+    sta vic_irq_beg
     lda #>irq 
-    sta irq_end
+    sta vic_irq_end
 
     cli
     rts
@@ -43,20 +45,23 @@ setup_irq:
 reset_irq:
     sei
     lda irq_beg_sav
-    sta irq_beg
+    sta vic_irq_beg
     lda irq_end_sav
-    sta irq_end
+    sta vic_irq_end
     cli
     rts
 
 // custom interrupt routine
 irq:
    
-    jsr color_wash  
-    jsr intro_music_start
-
     // acknowledge the raster interrupt
-    dec intrpt_sts  
+    dec vic_intrpt_sts  
+    jsr color_wash
+
+    // jsr intro_music_start
+    // jsr play_music
+    jsr check_input
+    jsr move_sprites
  
     jmp (irq_beg_sav)
 
