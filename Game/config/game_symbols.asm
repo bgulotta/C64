@@ -10,10 +10,14 @@
 .const title_offset     = scr_cols/2 - (title_length/2) + scr_cols * 12
 .const copyright_offset = scr_cols/2 - (copyright_length/2) + scr_cols * 22
 .const sprite_data      = $1600
+.const sprite_ymin      = $32
+.const sprite_ymax      = $E5
+.const sprite_xmin      = $32
+.const sprite_xmax      = $E5
 
 spriteon:           .byte $01, $01, $00, $00, $00, $00, $00, $00
 spritepointer:      .byte sprite_bear/$40, sprite_bird/$40, $00, $00, $00, $00, $00, $00
-spritex:            .byte $28, $57, $00, $00, $00, $00, $00, $00
+spritex:            .byte $28, $5B, $00, $00, $00, $00, $00, $00
 spritey:            .byte $78, $58, $00, $00, $00, $00, $00, $00
 spritemsb:          .byte $00, $01, $00, $00, $00, $00, $00, $00
 spritecolormenable: .byte $01, $01, $00, $00, $00, $00, $00, $00

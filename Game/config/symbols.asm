@@ -28,3 +28,5 @@
 .const vic_intrpt_sts       = $d019
 .const vic_irq_beg          = $0314
 .const vic_irq_end          = $0315
+.const cia_port_a           = $dc00
+.const cia_port_b           = $dc0b
