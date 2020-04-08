@@ -4,12 +4,16 @@
 
 .const irq_beg_sav      = $03a0
 .const irq_end_sav      = $03a1
-.const scr_cols         = 40
-.const scr_rows         = 25
-
-.const title_offset     = scr_cols/2 - (title_length/2) + scr_cols * 12
-.const copyright_offset = scr_cols/2 - (copyright_length/2) + scr_cols * 22
 .const sprite_data      = $1600
+
+.const spritepointerzp     = $fc
+.const screenpointerzp     = $fe
+.const screen_cols         = 40
+.const screen_rows         = 25
+
+.const title_offset     = screen_cols/2 - (title_length/2) + screen_cols * 12
+.const copyright_offset = screen_cols/2 - (copyright_length/2) + screen_cols * 22
+
 .const sprite_ymin      = $32
 .const sprite_ymax      = $E5
 .const sprite_xmin      = $32

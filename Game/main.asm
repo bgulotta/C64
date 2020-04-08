@@ -4,7 +4,6 @@
 #import "subroutines/setup_irq.asm"
 #import "subroutines/setup_vic.asm"
 #import "subroutines/sub_sprites.asm"
-#import "subroutines/sub_input.asm"
 
 BasicUpstart2(main)
 
@@ -15,7 +14,6 @@ main:
     jsr init_screen
     jsr init_title_screen
     jsr setup_sprites
-    jsr setup_input
     jsr setup_irq
 check_stop:
     jsr $FFE1

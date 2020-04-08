@@ -2,23 +2,6 @@
 #import "../config/game_symbols.asm"
 #importonce
 
-setup_input:
-
-rts
- 
-toggle_msb:
-    lda spritemsb
-    eor #$01
-    sta spritemsb
-msb_on:
-    lda spritex
-    cmp #$5B
-    bne input_exit
-reset_x:
-    lda #$00
-    sta spritex
-    sta spritemsb
-    jmp input_exit
 check_input:
     lsr cia_port_a
     bcc move_up
@@ -28,27 +11,57 @@ check_input:
     bcc move_left
     lsr cia_port_a
     bcc move_right
-    jmp input_exit
+    lsr cia_port_a
+    bcc jump
+    rts
+jump:
+    ldx #$5
+jump_loop:
+    jmp move_up
+    dex
+    bne jump_loop
+jump_exit:    
+rts
 move_up:
     lda spritey
     cmp #sprite_ymin
-    beq input_exit
+    beq move_up_exit
     dec spritey
-    jmp input_exit
+move_up_exit:
+    rts
 move_down:
     lda spritey
     cmp #sprite_ymax
-    beq input_exit
+    beq move_down_exit
     inc spritey
-    jmp input_exit
+move_down_exit:
+    rts
 move_right: 
     inc spritex
     jmp check_msb
+    rts
 move_left:
     dec spritex
+    jmp check_msb
+    rts
 check_msb:
     beq toggle_msb
     lda spritemsb
     bne msb_on
-input_exit:
     rts
+toggle_msb:
+    lda spritemsb
+    eor #$01
+    sta spritemsb
+    rts
+msb_on:
+    lda spritex
+    cmp #$5B
+    beq reset_x
+    rts
+reset_x:
+    lda #$00
+    sta spritex
+    sta spritemsb
+    rts
+

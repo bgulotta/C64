@@ -4,22 +4,22 @@
 
 setup_sprites:
 
-    ldx #$07
+    ldy #$07
 
 setup_sprites_loop:
 
     // setup sprite pointers
-    lda spritepointer, x
-    sta vic_scr_ram + $3f8, x
+    lda spritepointer, y
+    sta (spritepointerzp), y
 
     // set sprite multi color mode
-    lda spritecolormenable, x
+    lda spritecolormenable, y
     cmp #$01
     rol vic_spr_multi_mode
 
     // set sprite color
-    lda spritecolor, x
-    sta vic_spr_color, x
+    lda spritecolor, y
+    sta vic_spr_color, y
 
     // set sprite multi color 1
     lda spritecolormulti1
@@ -30,11 +30,11 @@ setup_sprites_loop:
     sta vic_spr_colorm2
     
     // turn on sprites
-    lda spriteon, x
+    lda spriteon, y
     cmp #$01
     rol vic_spr_enble_reg
 
-    dex
+    dey
     bpl setup_sprites_loop
     rts
 
@@ -57,6 +57,8 @@ move_sprites_loop:
     lda spritemsb, x
     cmp #$01
     rol vic_spr_xpos_msb
+
+    // todo: update sprite pointer
 
     dey
     dey

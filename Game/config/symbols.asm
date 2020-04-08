@@ -8,7 +8,7 @@
 .const vic_spr_enble_reg    = $d015 // VIC-II sprite enable register
 .const vic_ctrl_reg2        = $d016 // VIC-II control register 2; bit 4 high turns on multi-color mode; bit 3 low turns on 38 column mode 
 .const vic_mem_setup_reg    = $d018 // contains byte. bits 7-4 control scr_ram location
-                                  // contains byte. bits 3-1 control where your 2k byte character set is located
+                                    // contains byte. bits 3-1 control where your 2k byte character set is located
 .const vic_spr_multi_mode   = $d01c // Sprite multi color mode register
 .const vic_bdr_color        = $d020 // border color
 .const vic_bg_color         = $d021 // background (screen) color; in hi-res mode characters 0 bits have this color; in multi-color mode characters 00 bit pairs have this color
