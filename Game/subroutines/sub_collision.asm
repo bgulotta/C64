@@ -49,12 +49,42 @@ update_hit_boxes_done:
 rts
 
 check_sprite_collision:
-jmp update_hit_boxes
 
-csc_loop:
+jsr update_hit_boxes
+ldx #1
 
-rts
+collision_loop:
+
+//y_overlaps = (a.top < b.bottom) && (a.bottom > b.top)
+lda spritey1     
+cmp spritey2, x  
+bcs check_next_sprite // a.top >= b.bottom
+
+lda spritey1, x          
+cmp spritey2        
+bcs check_next_sprite // b.top >= a.bottom
+
+//x_overlaps = (a.left < b.right) && (a.right > b.left)
+sec
+lda spritex1      
+sbc spritex2, x   
+lda spritemsb1    
+sbc spritemsb2, x 
+bcs check_next_sprite // a.left >= b.right
+
+sec
+lda spritex1, x         
+sbc spritex2       
+lda spritemsb1, x  
+sbc spritemsb2      
+bcs check_next_sprite // b.left >= a.right
 
 hitbysprite:
 inc vic_bdr_color
+rts
+
+check_next_sprite:
+inx
+cpx #9
+bcs collision_loop
 rts

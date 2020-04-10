@@ -30,13 +30,13 @@ spritecolormulti2:  .byte   $0a
 
 *=$2800 "sprite locations"
 // sprite locations
-spritex:            .byte   $28, $5B, $00, $00, $00, $00, $00, $00
-spritey:            .byte   $78, $58, $00, $00, $00, $00, $00, $00
+spritex:            .byte   $28, $0F, $00, $00, $00, $00, $00, $00
+spritey:            .byte   $78, $48, $00, $00, $00, $00, $00, $00
 spritemsb:          .byte   $00, $01, $00, $00, $00, $00, $00, $00
 
 // sprite frame offsets
 spriteoffset:     	.byte   $05, $03, $00, $00, $00, $00, $00, $00 
-                    .byte   $0e, $3f, $00, $00, $00, $00, $00, $00
+                    .byte   $0e, $15, $00, $00, $00, $00, $00, $00
                     .byte   $05, $05, $00, $00, $00, $00, $00, $00
                     .byte   $0f, $0f, $00, $00, $00, $00, $00, $00
 
