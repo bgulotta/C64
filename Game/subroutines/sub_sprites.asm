@@ -1,16 +1,18 @@
+#importonce
 #import "../config/symbols.asm"
 #import "../config/game_symbols.asm"
-#importonce
+#import "sub_zero_page.asm"
 
 setup_sprites:
 
+    jsr sprite_pointer_reset
     ldy #$07
 
 setup_sprites_loop:
 
     // setup sprite pointers
     lda spritepointer, y
-    sta (spritepointerzp), y
+    sta (zero_page1), y
 
     // set sprite multi color mode
     lda spritecolormenable, y
@@ -58,7 +60,7 @@ move_sprites_loop:
     cmp #$01
     rol vic_spr_xpos_msb
 
-    // todo: update sprite pointer
+    // todo: update sprite frame pointer
 
     dey
     dey

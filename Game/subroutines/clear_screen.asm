@@ -1,7 +1,7 @@
 #importonce
-#import "../config/symbols.asm"
-#import "../config/game_symbols.asm"
-#import "setup_vic.asm"
+//#import "../config/symbols.asm"
+//#import "../config/game_symbols.asm"
+#import "sub_zero_page.asm"
 
 /*
     This subroutine clears the C64 screen.
@@ -11,6 +11,7 @@
 */
 
 init_screen:
+    jsr screen_pointer_reset
     ldx #0 
     lda #0  
     sta vic_bg_color 
@@ -19,7 +20,7 @@ next_row:
     ldy #0
     lda #$20
 next_column:
-    sta (screenpointerzp), y
+    sta (zero_page1), y
     iny
     cpy #screen_cols
     bne next_column
@@ -29,5 +30,4 @@ next_column:
     jsr screen_pointer_next_row
     jmp next_row
 init_screen_done:
-    jsr screen_pointer_reset
     rts

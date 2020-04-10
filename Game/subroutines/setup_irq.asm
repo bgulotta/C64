@@ -62,7 +62,7 @@ irq:
     // jsr intro_music_start
     // jsr play_music
     jsr check_input
-    jsr check_collision
+    jsr check_sprite_collision
     jsr move_sprites
  
     jmp (irq_beg_sav)
