@@ -1,6 +1,4 @@
 #importonce
-//#import "../config/symbols.asm"
-//#import "../config/game_symbols.asm"
 #import "sub_zero_page.asm"
 
 /*
@@ -11,7 +9,7 @@
 */
 
 init_screen:
-    jsr screen_pointer_reset
+    jsr zp_screen_pointer
     ldx #0 
     lda #0  
     sta vic_bg_color 
@@ -27,7 +25,7 @@ next_column:
     inx
     cpx #screen_rows
     beq init_screen_done
-    jsr screen_pointer_next_row
+    jsr zp_screen_pointer_next_row
     jmp next_row
 init_screen_done:
     rts

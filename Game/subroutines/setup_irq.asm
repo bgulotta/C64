@@ -1,10 +1,9 @@
 #importonce
-#import "../config/symbols.asm"
-#import "../config/game_symbols.asm"
 #import "../subroutines/sub_sprites.asm"
 #import "../subroutines/color_wash.asm"
 #import "../subroutines/sub_input.asm"
 #import "../subroutines/sub_collision.asm"
+#import "../subroutines/sub_debug.asm"
 
 setup_irq:
     sei
@@ -54,16 +53,14 @@ reset_irq:
 
 // custom interrupt routine
 irq:
-   
     // acknowledge the raster interrupt
     dec vic_intrpt_sts  
     jsr color_wash
 
-    // jsr intro_music_start
-    // jsr play_music
     jsr check_input
     jsr check_sprite_collision
     jsr move_sprites
- 
+    jsr debug_output
+
     jmp (irq_beg_sav)
 

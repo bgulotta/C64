@@ -1,11 +1,9 @@
 #importonce
-#import "../config/symbols.asm"
-#import "../config/game_symbols.asm"
 #import "sub_zero_page.asm"
 
 setup_sprites:
 
-    jsr sprite_pointer_reset
+    jsr zp_sprite_pointer
     ldy #$07
 
 setup_sprites_loop:
