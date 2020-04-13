@@ -98,10 +98,9 @@ rts
 
 check_sprite_collision:
 
-jsr update_sprite_hitbox
 ldx #1
 
-collision_loop:
+sprite_collision_loop:
 
 //y_overlaps = (a.top < b.bottom) && (a.bottom > b.top)
 lda spritey1     
@@ -134,5 +133,9 @@ rts
 check_next_sprite:
 inx
 cpx #9
-bcs collision_loop
+bcs sprite_collision_loop
+rts
+
+check_tile_collision:
+
 rts

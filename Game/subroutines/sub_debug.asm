@@ -1,5 +1,5 @@
 #importonce
-#import "../config/game_symbols.asm"
+#import "sub_zero_page.asm"
 
 debug_output:
 

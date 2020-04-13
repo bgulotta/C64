@@ -58,8 +58,10 @@ irq:
 
     //jsr color_wash
     jsr check_input
-    jsr move_sprites
+    jsr update_sprite_hitbox
     jsr check_sprite_collision
+    jsr check_tile_collision
+    jsr move_sprites
     jsr debug_output
 
     jmp (irq_beg_sav)
