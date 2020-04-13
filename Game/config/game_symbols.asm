@@ -53,13 +53,9 @@ spritey1:	       .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritey2:	       .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // character hit boxes
-spritex1col:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritex2col:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritex1row:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritex2row:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritey1row:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritey1col:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritey2row:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritey2col:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spritecol1:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spritecol2:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spriterow1:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spriterow2:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 arithmetic_value:  .byte   $00, $00

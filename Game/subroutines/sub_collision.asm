@@ -2,10 +2,9 @@
 #import "sub_zero_page.asm"
 #import "sub_arithmetic.asm"
 
-update_hit_boxes:
+update_sprite_hitbox:
 
 jsr zp_offset_table
-jsr zp_char_hitbox
 
 ldx #0
 
@@ -20,30 +19,19 @@ sta spritex1, x
 lda spritemsb, x
 adc #$00
 sta spritemsb1,x
-pha
-pla
-// set x1col
-/*sec
-lda spritex1, x
+
+// set col1
+sec
+lda spritex1, x     
 sbc #screen_xoffset   
 sta arithmetic_value + 1
-pla
+lda spritemsb1, x 
 sbc #$00
 sta arithmetic_value
-jsr divide_by_8
-ldy #0
-sta (zero_page2), y*/
 
-/*
-spritex1col:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritex2col:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritex1row:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritex2row:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritey1row:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritey1col:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritey2row:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritey2col:       .byte   $00, $00, $00, $00, $00, $00, $00, $00
-*/
+jsr divide_by_8
+lda arithmetic_value + 1
+sta spritecol1, x
 
 // set x2
 lda spritex1, x
@@ -54,20 +42,19 @@ sta spritex2, x
 lda spritemsb, x
 adc #$00
 sta spritemsb2,x
-pha
-pla
-// set x2col
-/*sec
-lda spritex2, x
-sbc #screen_xoffset   
+
+// sprite col2
+sec
+lda spritex2, x      
+sbc #screen_xoffset  
 sta arithmetic_value + 1
-pla
+lda spritemsb2, x
 sbc #$00
 sta arithmetic_value
+
 jsr divide_by_8
-ldy #8
-sta (zero_page2), y
-*/
+lda arithmetic_value + 1
+sta spritecol2, x
 
 // set y1 & y2
 lda spritey, x
@@ -79,18 +66,39 @@ ldy #24
 adc (zero_page1), y
 sta spritey2, x
 
+// sprite row1
+lda spritey1, x     
+sbc #screen_yoffset   
+sta arithmetic_value + 1
+lda #0
+sta arithmetic_value
+
+jsr divide_by_8
+lda arithmetic_value + 1
+sta spriterow1, x
+
+// sprite x2row
+lda spritey2, x      
+sbc #screen_yoffset   
+sta arithmetic_value + 1
+lda #0
+sta arithmetic_value
+
+jsr divide_by_8
+lda arithmetic_value + 1
+sta spriterow2, x
+
 inx
 cpx #$07
-beq update_hit_boxes_done
+beq update_sprite_hitbox_done
 jsr zp_offset_table_next
-jsr zp_char_hitbox_next
 jmp set_hit_box
-update_hit_boxes_done:
+update_sprite_hitbox_done:
 rts
 
 check_sprite_collision:
 
-jsr update_hit_boxes
+jsr update_sprite_hitbox
 ldx #1
 
 collision_loop:
