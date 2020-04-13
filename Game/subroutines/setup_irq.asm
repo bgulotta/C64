@@ -55,8 +55,8 @@ reset_irq:
 irq:
     // acknowledge the raster interrupt
     dec vic_intrpt_sts  
-    jsr color_wash
 
+    //jsr color_wash
     jsr check_input
     jsr move_sprites
     jsr check_sprite_collision
