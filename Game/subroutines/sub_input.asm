@@ -3,16 +3,20 @@
 #importonce
 
 check_input:
-    lsr cia_port_a
-    bcc move_up
-    lsr cia_port_a
-    bcc move_down
-    lsr cia_port_a
-    bcc move_left
-    lsr cia_port_a
-    bcc move_right
-    lsr cia_port_a
-    bcc jump
+    lda #$01
+    bit cia_port_a
+    beq move_up
+    lda #$02
+    bit cia_port_a
+    beq move_down
+    lda #$04
+    bit cia_port_a
+    beq move_left
+    lda #$08
+    bit cia_port_a
+    beq move_right
+    /*lsr cia_port_a
+    bcc jump*/
     rts
 jump:
     ldx #$5
@@ -21,7 +25,7 @@ jump_loop:
     dex
     bne jump_loop
 jump_exit:    
-rts
+    rts
 move_up:
     lda spritey
     cmp #sprite_ymin

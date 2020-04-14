@@ -1,6 +1,6 @@
 #importonce
 #import "../subroutines/sub_sprites.asm"
-#import "../subroutines/color_wash.asm"
+//#import "../subroutines/color_wash.asm"
 #import "../subroutines/sub_input.asm"
 #import "../subroutines/sub_collision.asm"
 #import "../subroutines/sub_debug.asm"

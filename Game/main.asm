@@ -1,9 +1,3 @@
-#import "resources/sprite/data.asm"
-#import "subroutines/clear_screen.asm"
-#import "subroutines/title_screen.asm"
-#import "subroutines/setup_irq.asm"
-#import "subroutines/setup_vic.asm"
-#import "subroutines/sub_sprites.asm"
 
 BasicUpstart2(main)
 
@@ -12,7 +6,7 @@ BasicUpstart2(main)
 main:   
     jsr setup_vic_memory
     jsr init_screen
-    //jsr init_title_screen
+    jsr init_title_screen
     jsr setup_sprites
     jsr setup_irq
 check_stop:
@@ -23,3 +17,22 @@ exit:
     jsr reset_irq
     jsr $FCE2
     rts
+
+*=$0840 "Symbols" 
+#import "config/symbols.asm"
+#import "config/game_symbols.asm"
+*=sprite_data "Sprite Data"
+#import "resources/sprite/data.asm"
+
+*=subroutines "Subroutines"
+#import "subroutines/sub_zero_page.asm"
+#import "subroutines/sub_clear_screen.asm"
+#import "subroutines/sub_title_screen.asm"
+#import "subroutines/sub_sprites.asm"
+#import "subroutines/sub_arithmetic.asm"
+#import "subroutines/sub_collision.asm"
+#import "subroutines/sub_debug.asm"
+#import "subroutines/sub_input.asm"
+#import "subroutines/sub_title_screen.asm"
+#import "subroutines/sub_setup_vic.asm"
+#import "subroutines/sub_setup_irq.asm"
