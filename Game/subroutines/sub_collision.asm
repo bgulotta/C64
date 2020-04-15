@@ -184,20 +184,28 @@ bne cus_sprite_loop
 rts
 
 handle_char_collision:
+ldx #$0
+
+hcc_next_sprite:
 // are we on the ground?
+ldy spritecollisiondir, x
+sty arithmetic_value
 lda #$02
-bit spritecollisiondir
+bit arithmetic_value
 bne on_ground
-ldy spritejumpframes 
+ldy spritejumpframes, x 
 cpy #$0 // are we jumping?
 bne hcc_exit
 jmp in_air
 on_ground:
-lda spritemovement
+lda spritemovement, x
 ora #$10
-sta spritemovement
+sta spritemovement, x
 jmp hcc_exit
 in_air:
-inc spritey 
+inc spritey, x
 hcc_exit:
+inx
+cpx #$08
+bne hcc_next_sprite
 rts
