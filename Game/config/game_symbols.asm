@@ -16,7 +16,8 @@
 .const sprite_ymax      = $E5
 .const sprite_xmin      = $32
 .const sprite_xmax      = $E5
-.const title_offset     = screen_cols/2 - (title_length/2) + screen_cols * 12
+
+.const title_offset     = screen_cols/2 - (title_length/2) + screen_cols * 16
 .const copyright_offset = screen_cols/2 - (copyright_length/2) + screen_cols * 22
 
 *=sprite_meta "Sprite Meta"
@@ -30,10 +31,15 @@ spritecolormulti1:  .byte   $0c
 spritecolormulti2:  .byte   $0a
 
 // sprite locations and other attributes
-spritex:            .byte   $28, $50, $00, $00, $00, $00, $00, $00
+spritex:            .byte   $28, $80, $00, $00, $00, $00, $00, $00
 spritey:            .byte   $78, $48, $00, $00, $00, $00, $00, $00
 spritemsb:          .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritespeed:        .byte   $01, $01, $00, $00, $00, $00, $00, $00
+spritemovement:     .byte   $EC, $00, $00, $00, $00, $00, $00, $00
+spritejumpframes:   .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spritejumpcfg:      .byte   $1F, $00, $00, $00, $00, $00, $00, $00
+spritecollisionchr: .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisiondir: .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisionspr: .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite frame offsets
 spriteoffset:     	.byte   $05, $03, $00, $00, $00, $00, $00, $00 

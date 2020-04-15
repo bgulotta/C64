@@ -3,6 +3,10 @@
 #importonce
 
 check_input:
+    lda #$10
+    bit cia_port_a
+    beq jump
+check_direction:
     lda #$01
     bit cia_port_a
     beq move_up
@@ -15,36 +19,45 @@ check_input:
     lda #$08
     bit cia_port_a
     beq move_right
-    /*lsr cia_port_a
-    bcc jump*/
+input_exit:
     rts
 jump:
-    ldx #$5
-jump_loop:
-    jmp move_up
-    dex
-    bne jump_loop
-jump_exit:    
-    rts
+    bit spritemovement
+    beq check_direction
+
+    // disable jumping
+    lda spritemovement
+    eor #$10
+    sta spritemovement
+
+    lda spritejumpcfg
+    sta spritejumpframes
+
 move_up:
+    bit spritemovement
+    beq input_exit
     lda spritey
     cmp #sprite_ymin
-    beq move_up_exit
+    beq input_exit
     dec spritey
-move_up_exit:
     rts
 move_down:
+    bit spritemovement
+    beq input_exit
     lda spritey
     cmp #sprite_ymax
-    beq move_down_exit
+    beq input_exit
     inc spritey
-move_down_exit:
     rts
 move_right: 
+    bit spritemovement
+    beq input_exit
     inc spritex
     jmp check_msb
     rts
 move_left:
+    bit spritemovement
+    beq input_exit
     dec spritex
     jmp check_msb
     rts

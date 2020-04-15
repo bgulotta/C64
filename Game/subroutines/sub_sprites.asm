@@ -37,7 +37,7 @@ setup_sprites_loop:
     dey
     bpl setup_sprites_loop
     rts
-
+    
 move_sprites:
 
     ldx #$07
@@ -67,3 +67,26 @@ move_sprites_loop:
     bpl move_sprites_loop
 
     rts
+
+check_sprite_jumping:
+    lda spritejumpframes
+    cmp #$0
+    beq js_exit
+    
+    dec spritejumpframes    
+
+    sec 
+    lda spritejumpcfg
+    sbc spritejumpframes
+    sta arithmetic_value
+    asl arithmetic_value
+    
+    ldy arithmetic_value
+js_loop:
+    dec spritey
+    dey
+    beq js_loop
+
+js_exit:
+    rts
+

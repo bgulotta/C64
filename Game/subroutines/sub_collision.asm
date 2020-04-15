@@ -136,6 +136,64 @@ cpx #9
 bcs sprite_collision_loop
 rts
 
-check_tile_collision:
+handle_sprite_collision:
 
+rts
+
+check_char_collision:
+
+char_under_sprite:
+
+ldx #0
+cus_sprite_loop:
+ldy spriterow2, x
+jsr zp_screen_pointer
+cus_next_row:
+beq check_bottom
+jsr zp_screen_pointer_next_row
+dey
+jmp cus_next_row
+check_bottom:
+ldy spritecol1, x
+lda (zero_page1), y
+cmp #$20
+bne cus_hit
+jmp cus_no_hit
+cus_hit:
+// set sprite collision meta
+sta spritecollisionchr, x 
+lda spritecollisiondir, x
+ora #$02
+sta spritecollisiondir, x
+jmp cus_next_sprite
+cus_no_hit:
+// clear sprite collision meta
+lda #$0
+sta spritecollisionchr, x 
+lda spritecollisiondir, x
+and #$FD
+sta spritecollisiondir, x
+cus_next_sprite:
+inx
+cpx #$08
+bne cus_sprite_loop
+rts
+
+handle_char_collision:
+// are we on the ground?
+lda #$02
+bit spritecollisiondir
+bne on_ground
+ldy spritejumpframes 
+cpy #$0 // are we jumping?
+bne hcc_exit
+jmp in_air
+on_ground:
+lda spritemovement
+ora #$10
+sta spritemovement
+jmp hcc_exit
+in_air:
+inc spritey 
+hcc_exit:
 rts
