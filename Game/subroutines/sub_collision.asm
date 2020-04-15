@@ -158,6 +158,10 @@ ldy spritecol1, x
 lda (zero_page1), y
 cmp #$20
 bne cus_hit
+ldy spritecol2, x
+lda (zero_page1), y
+cmp #$20
+bne cus_hit
 jmp cus_no_hit
 cus_hit:
 // set sprite collision meta
