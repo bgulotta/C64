@@ -22,43 +22,48 @@ check_direction:
 input_exit:
     rts
 jump:
-    bit spritemovement
+    bit spritemovement 
     beq check_direction
-
-    // disable jumping
+    // reset jump distance covered
+    lda #$0
+    sta spritejumpdistcov 
+    // disable jumping ability
     lda spritemovement
     eor #$10
     sta spritemovement
-
-    lda spritejumpcfg
-    sta spritejumpframes
-
+    jmp check_direction
 move_up:
     bit spritemovement
     beq input_exit
+    sec 
     lda spritey
-    cmp #sprite_ymin
-    beq input_exit
-    dec spritey
+    sbc spritemovementspd
+    sta spritey
     rts
 move_down:
     bit spritemovement
     beq input_exit
+    clc 
     lda spritey
-    cmp #sprite_ymax
-    beq input_exit
-    inc spritey
+    adc spritemovementspd
+    sta spritey
     rts
 move_right: 
     bit spritemovement
     beq input_exit
-    inc spritex
+    clc 
+    lda spritex
+    adc spritemovementspd
+    sta spritex
     jmp check_msb
     rts
 move_left:
     bit spritemovement
     beq input_exit
-    dec spritex
+    sec 
+    lda spritex
+    sbc spritemovementspd
+    sta spritex
     jmp check_msb
     rts
 check_msb:

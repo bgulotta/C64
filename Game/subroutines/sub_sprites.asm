@@ -68,25 +68,47 @@ move_sprites_loop:
 
     rts
 
-check_sprite_jumping:
-    lda spritejumpframes
-    cmp #$0
-    beq js_exit
-    
-    dec spritejumpframes    
-
-    sec 
-    lda spritejumpcfg
-    sbc spritejumpframes
-    sta arithmetic_value
-    asl arithmetic_value
-    
-    ldy arithmetic_value
-js_loop:
-    dec spritey
-    dey
-    beq js_loop
-
-js_exit:
+check_sprite_airborne:
+    ldx #$0
+csa_next_sprite_loop:
+    // are we in a jump? 
+    lda spritemovement, x
+    and #$10
+    cmp #$00
+    beq csa_jump
+    jmp csa_fall
+csa_next_sprite:
+    inx
+    cpx #$08
+    beq csa_exit
+    jmp csa_next_sprite_loop
+csa_jump:    
+    // have we jumped the configured distance
+    lda spritejumpdistcov, x
+    cmp spritejumpdist, x
+    bcs csa_fall
+    // continue jumping
+    lda spritey, x
+    sec
+    sbc spritejumpspeed, x 
+    sta spritey, x
+    // add to the distance covered
+    lda spritejumpdistcov, x
+    clc
+    adc spritejumpspeed, x 
+    sta spritejumpdistcov, x
+    jmp csa_next_sprite
+csa_fall:
+    // are we on solid ground?
+    lda spritecollisiondir, x
+    and #$02
+    bne csa_next_sprite
+    // continue falling
+    lda spritey, x
+    clc
+    adc spritefallspeed, x
+    sta spritey, x
+    jmp csa_next_sprite    
+csa_exit:
     rts
 

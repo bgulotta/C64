@@ -4,7 +4,7 @@
 debug_output:
 
 jsr draw_border_bottom
-//jsr char_under_sprite
+//debug_char_under_sprite()
 
 rts
 
@@ -63,7 +63,9 @@ bne draw_char_border_bottom
 exit_debug:
 rts
 
-/*char_under_sprite:
+
+.macro debug_char_under_sprite () {
+char_under_sprite:
 
 ldx #0
 cus_next_sprite:
@@ -84,4 +86,6 @@ cus_hit:
 inx
 cpx #$08
 bne cus_next_sprite
-rts*/
+rts                
+}
+

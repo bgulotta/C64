@@ -35,8 +35,11 @@ spritex:            .byte   $28, $80, $00, $00, $00, $00, $00, $00
 spritey:            .byte   $78, $48, $00, $00, $00, $00, $00, $00
 spritemsb:          .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritemovement:     .byte   $EC, $00, $00, $00, $00, $00, $00, $00
-spritejumpframes:   .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritejumpcfg:      .byte   $1F, $00, $00, $00, $00, $00, $00, $00
+spritemovementspd:  .byte   $02, $00, $00, $00, $00, $00, $00, $00
+spritejumpdistcov:  .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spritejumpdist:     .byte   $1a, $00, $00, $00, $00, $00, $00, $00
+spritejumpspeed:    .byte   $03, $00, $00, $00, $00, $00, $00, $00
+spritefallspeed:    .byte   $03, $01, $00, $00, $00, $00, $00, $00
 spritecollisionchr: .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritecollisiondir: .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritecollisionspr: .byte   $00, $00, $00, $00, $00, $00, $00, $00
