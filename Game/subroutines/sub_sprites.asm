@@ -117,10 +117,10 @@ csa_jump:
     dec spritejumpspeed, x
     jmp csa_next_sprite
 csa_check_fall:
-    // do we have a character under us?
+    // do we have collision under us?
     lda spritecollisiondir, x
     and #$02
-    bne csa_char_type
+    bne csa_next_sprite
 csa_fall:
     // continue falling
     lda spritey, x
@@ -128,11 +128,6 @@ csa_fall:
     adc spritefallspeed, x
     sta spritey, x
     jmp csa_next_sprite
-csa_char_type:
-    lda spritechartype, x
-    and #$7C
-    bne csa_next_sprite
-    jmp csa_fall
 csa_exit:
     rts
 

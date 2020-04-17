@@ -59,13 +59,12 @@ dcc_next_sprite:
     bcc dcc_loop
     rts
 dcc_loop:
-    
     // clear out any previous collision meta data
     lda #$0
-    sta spritechartype, x
-    sta spritecollisionchr, x 
-    lda spritecollisiondir, x
-    and #$FD
+    sta spritecollisionabv, x
+    sta spritecollisionblw, x
+    sta spritecollisionlft, x 
+    sta spritecollisionrght, x 
     sta spritecollisiondir, x
 
     // is this sprite on?
@@ -113,7 +112,8 @@ dcc_check_finished:
     jmp dcc_row_loop
 dcc_hit:
     // store char we collided with (TODO: may be able to get rid of this)
-    sta spritecollisionchr, x 
+    //sta spritecollisionchr, x 
+    
     cmp #$f0 // Death (spikes etc)
     bcs dcc_hit_deadly_platform
     cmp #$c0 // Solid platforms (cannot pass through)
@@ -139,9 +139,11 @@ dcc_hit_collapsing_platform:
     lda #$01
     jmp dcc_store_char_type
 dcc_store_char_type:
-    // store char type
-    sta spritechartype, x
-dcc_store_char_direction:
+
+    // TODO: determine collision direction
+    // and store int the correct type
+    sta spritecollisionblw, x
+
     // TODO: store collision direction
     lda spritecollisiondir, x
     ora #$02
