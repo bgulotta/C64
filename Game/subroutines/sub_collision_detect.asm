@@ -89,6 +89,7 @@ dcc_check_sprite:
     lda spriterow2, x
     sbc spriterow1, x
     sta num2
+    inc num2
 dcc_row_loop:
     // go to the next row
     jsr zp_screen_pointer_next_row
@@ -112,8 +113,7 @@ dcc_check_finished:
     jmp dcc_row_loop
 dcc_hit:
     // store char we collided with (TODO: may be able to get rid of this)
-    //sta spritecollisionchr, x 
-    
+    //sta spritecollisionchr, x     
     cmp #$f0 // Death (spikes etc)
     bcs dcc_hit_deadly_platform
     cmp #$c0 // Solid platforms (cannot pass through)

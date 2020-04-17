@@ -4,13 +4,71 @@
 debug_output:
 
 jsr draw_border_bottom
-//jsr draw_char_boundaries
+//DrawCharBoundaries()
 //debug_char_under_sprite()
 rts
 
 /*
     This method will fill in the characters the sprite is in
 */
+.macro DrawCharBoundaries () {
+                /* 
+    This routine checks for sprite to character collisions and sets appropriate
+    meta data for collision routine to respond accordingly
+*/
+detect_char_collision:
+    ldx #$ff
+dcc_next_sprite:
+    inx
+    // are we finished with all sprites?
+    cpx #$08
+    bcc dcc_loop
+    rts
+dcc_loop:
+    // is this sprite on?
+    lda spriteon, x
+    beq dcc_next_sprite
+    // set zero page screen memory pointer 
+    jsr zp_screen_pointer
+    // keep moving down a row until we get to the start of the sprite
+    ldy spriterow1, x
+dcc_next_row:
+    cpy #$1
+    beq dcc_check_sprite
+    jsr zp_screen_pointer_next_row
+    dey
+    jmp dcc_next_row
+dcc_check_sprite:
+    // y = num1 current row is finished
+    lda spritecol1, x
+    sta num1
+    // num2 = 0 sprite finished
+    sec 
+    lda spriterow2, x
+    sbc spriterow1, x
+    sta num2
+    inc num2
+dcc_row_loop:
+    // go to the next row
+    jsr zp_screen_pointer_next_row
+    // start at the last column
+    ldy spritecol2, x
+dcc_column_loop:   
+    // is this character one we need to act on?
+    lda #$43
+    sta (zero_page1), y
+dcc_check_finished:
+    // are we done with this row?
+    dey
+    cpy num1
+    bcs dcc_column_loop
+    // are we done with all rows?
+    dec num2
+    lda num2
+    beq dcc_next_sprite
+    jmp dcc_row_loop
+}
+
 draw_char_boundaries:
     ldx #0
 dcb_loop:

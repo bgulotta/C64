@@ -54,6 +54,10 @@ move_sprites:
 
 move_sprites_loop:
 
+     // is this sprite on?
+    lda spriteon, x
+    beq ms_next_sprite
+
     // set sprite ypos
     lda spritey, x
     sta vic_spr_ypos, y
@@ -69,6 +73,8 @@ move_sprites_loop:
 
     // todo: update sprite frame pointer for animation
 
+    ms_next_sprite:
+
     dey
     dey
     dex
@@ -82,19 +88,22 @@ move_sprites_loop:
     and moves the sprite accordingly
 */
 check_sprite_airborne:
-    ldx #$0
+    ldx #$ff
+csa_next_sprite:
+    inx
+    cpx #$08
+    beq csa_exit
+    jmp csa_next_sprite_loop
 csa_next_sprite_loop:
+     // is this sprite on?
+    lda spriteon, x
+    beq csa_next_sprite
     // are we in a jump? 
     lda spritemovement, x
     and #$10
     cmp #$00
     beq csa_jump
     jmp csa_check_fall
-csa_next_sprite:
-    inx
-    cpx #$08
-    beq csa_exit
-    jmp csa_next_sprite_loop
 csa_jump:    
     // have we jumped the configured distance
     lda spritejumpdistcov, x
