@@ -35,16 +35,16 @@ spritex:            .byte   $a8, $80, $00, $00, $00, $00, $00, $00
 spritey:            .byte   $78, $48, $00, $00, $00, $00, $00, $00
 spritemsb:          .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritemovement:     .byte   $FC, $00, $00, $00, $00, $00, $00, $00
-spritemovementspd:  .byte   $02, $00, $00, $00, $00, $00, $00, $00
+spritemovementspd:  .byte   $01, $00, $00, $00, $00, $00, $00, $00
 spritejumpdistcov:  .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritejumpdist:     .byte   $20, $00, $00, $00, $00, $00, $00, $00
+spritejumpdist:     .byte   $1e, $00, $00, $00, $00, $00, $00, $00
 spritejumpspeed:    .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spriteinitialjs:    .byte   $06, $00, $00, $00, $00, $00, $00, $00
-spritefallspeed:    .byte   $04, $01, $00, $00, $00, $00, $00, $00
+spriteinitialjs:    .byte   $05, $00, $00, $00, $00, $00, $00, $00
+spritefallspeed:    .byte   $02, $01, $00, $00, $00, $00, $00, $00
+spritecollisionspr: .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritecollisionchr: .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritechartype:     .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritecollisiondir: .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritecollisionspr: .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite frame offsets
 spriteoffsetx1:     .byte   $06, $02, $00, $00, $00, $00, $00, $00 
@@ -67,6 +67,9 @@ spritecol2:         .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spriterow1:         .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spriterow2:         .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
+// looping / math 
 arithmetic_value:   .byte   $00, $00
 num1:               .byte   $00
 num2:               .byte   $00
+num3:               .byte   $00
+num4:               .byte   $00
