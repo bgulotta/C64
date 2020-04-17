@@ -1,6 +1,11 @@
 #importonce
 #import "sub_zero_page.asm"
+#import "sub_arithmetic.asm"
 
+/*
+    This routine sets up sprites in vic register based 
+    on current configuration data.
+*/
 setup_sprites:
 
     jsr zp_sprite_pointer
@@ -37,7 +42,11 @@ setup_sprites_loop:
     dey
     bpl setup_sprites_loop
     rts
-    
+
+/*
+    This routine does the actual updating of the vic registers to move the sprites
+    based on their x,y positions
+*/
 move_sprites:
 
     ldx #$07
@@ -45,20 +54,20 @@ move_sprites:
 
 move_sprites_loop:
 
-    // set sprite xpos
-    lda spritex, x
-    sta vic_spr_xpos, y
-
     // set sprite ypos
     lda spritey, x
     sta vic_spr_ypos, y
+
+    // set sprite xpos
+    lda spritex, x
+    sta vic_spr_xpos, y
 
     // set sprite xpos msb
     lda spritemsb, x
     cmp #$01
     rol vic_spr_xpos_msb
 
-    // todo: update sprite frame pointer
+    // todo: update sprite frame pointer for animation
 
     dey
     dey
@@ -68,6 +77,10 @@ move_sprites_loop:
 
     rts
 
+/*
+    This routine checks to see if a sprite is in a jump/fall sequence
+    and moves the sprite accordingly
+*/
 check_sprite_airborne:
     ldx #$0
 csa_next_sprite_loop:
@@ -76,7 +89,7 @@ csa_next_sprite_loop:
     and #$10
     cmp #$00
     beq csa_jump
-    jmp csa_fall
+    jmp csa_check_fall
 csa_next_sprite:
     inx
     cpx #$08
@@ -86,7 +99,7 @@ csa_jump:
     // have we jumped the configured distance
     lda spritejumpdistcov, x
     cmp spritejumpdist, x
-    bcs csa_fall
+    bcs csa_check_fall
     // continue jumping
     lda spritey, x
     sec
@@ -98,17 +111,118 @@ csa_jump:
     adc spritejumpspeed, x 
     sta spritejumpdistcov, x
     jmp csa_next_sprite
-csa_fall:
-    // are we on solid ground?
+csa_check_fall:
+    // do we have a character under us?
     lda spritecollisiondir, x
     and #$02
-    bne csa_next_sprite
+    bne csa_char_type
+csa_fall:
     // continue falling
     lda spritey, x
     clc
     adc spritefallspeed, x
     sta spritey, x
-    jmp csa_next_sprite    
+    jmp csa_next_sprite
+csa_char_type:
+    lda spritechartype, x
+    and #$7C
+    bne csa_next_sprite
+    jmp csa_fall
 csa_exit:
     rts
 
+/*
+    This routine takes the current sprite position and
+    calculates the exact sprite coordinates based on 
+    the sprite offset data. It then calculates the character
+    row and columns touched by the sprite
+*/
+update_sprite_hitbox_done:
+rts
+update_sprite_hitbox:
+ldx #$ff
+ush_loop:
+inx
+cpx #$07
+beq update_sprite_hitbox_done
+
+// is this sprite on?
+lda spriteon, x
+beq ush_loop
+
+// set x1
+lda spritex, x
+clc
+adc spriteoffsetx1, x
+sta spritex1, x
+lda spritemsb, x
+adc #$00
+sta spritemsb1,x
+
+// set col1
+sec
+lda spritex1, x     
+sbc #screen_xoffset   
+sta arithmetic_value + 1
+lda spritemsb1, x 
+sbc #$00
+sta arithmetic_value
+
+jsr divide_by_8
+lda arithmetic_value + 1
+sta spritecol1, x
+
+// set x2
+lda spritex1, x
+clc
+adc spriteoffsetx2, x
+sta spritex2, x
+lda spritemsb, x
+adc #$00
+sta spritemsb2,x
+
+// sprite col2
+sec
+lda spritex2, x      
+sbc #screen_xoffset  
+sta arithmetic_value + 1
+lda spritemsb2, x
+sbc #$00
+sta arithmetic_value
+
+jsr divide_by_8
+lda arithmetic_value + 1
+sta spritecol2, x
+
+// set y1 & y2
+lda spritey, x
+clc
+adc spriteoffsety1, x
+sta spritey1, x
+adc spriteoffsety2, x
+sta spritey2, x
+
+// sprite row1
+lda spritey1, x     
+sbc #screen_yoffset   
+sta arithmetic_value + 1
+lda #0
+sta arithmetic_value
+
+jsr divide_by_8
+lda arithmetic_value + 1
+sta spriterow1, x
+
+// sprite row2
+lda spritey2, x      
+sbc #screen_yoffset   
+sta arithmetic_value + 1
+lda #0
+sta arithmetic_value
+
+jsr divide_by_8
+lda arithmetic_value + 1
+sta spriterow2, x
+
+jmp ush_loop
+rts

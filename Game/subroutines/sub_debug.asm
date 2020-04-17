@@ -4,8 +4,8 @@
 debug_output:
 
 jsr draw_border_bottom
+//jsr draw_char_boundaries
 //debug_char_under_sprite()
-
 rts
 
 draw_char_boundaries:
@@ -21,7 +21,7 @@ dey
 jmp next_row_debug
 draw_char:
 ldy spritecol1,x
-lda #$49 
+lda #$A0 
 sta (zero_page1), y
 
 // draw character bottom right
@@ -34,7 +34,7 @@ dey
 jmp next_row_debug2
 draw_char2:
 ldy spritecol2,x
-lda #$49 
+lda #$A0 
 sta (zero_page1), y
 
 inx
@@ -46,7 +46,6 @@ draw_border_bottom:
 
 jsr zp_screen_pointer
 ldy #20
-lda #$49 
 
 next_row_border_bottom:
 beq draw_char_border_bottom
@@ -55,7 +54,7 @@ dey
 jmp next_row_border_bottom
 
 draw_char_border_bottom:
-
+lda #$80
 sta (zero_page1), y
 iny
 cpy #screen_cols

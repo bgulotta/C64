@@ -2,7 +2,8 @@
 #import "../subroutines/sub_sprites.asm"
 //#import "../subroutines/color_wash.asm"
 #import "../subroutines/sub_input.asm"
-#import "../subroutines/sub_collision.asm"
+#import "../subroutines/sub_collision_detect.asm"
+#import "../subroutines/sub_collision_respond.asm"
 #import "../subroutines/sub_debug.asm"
 
 setup_irq:
@@ -60,10 +61,10 @@ irq:
     jsr check_input
     jsr check_sprite_airborne
     jsr update_sprite_hitbox
-    jsr check_sprite_collision
-    jsr check_char_collision
-    jsr handle_sprite_collision
-    jsr handle_char_collision
+    jsr detect_sprite_collision
+    jsr detect_char_collision
+    jsr respond_sprite_collision
+    jsr respond_char_collision
     jsr move_sprites
     jsr debug_output
     jmp (irq_beg_sav)
