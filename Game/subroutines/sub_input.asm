@@ -24,9 +24,6 @@ input_exit:
 jump:
     bit spritemovement 
     beq check_direction
-    // reset jump distance covered
-    lda #$0
-    sta spritejumpdistcov 
     // disable jumping ability
     lda spritemovement
     eor #$10

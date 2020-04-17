@@ -66,30 +66,21 @@ cus_next_row:
     dey
     jmp cus_next_row
 cus_check_bottom:
-    // is there a character under our bottom left?
-    ldy spritecol1, x
-    lda (zero_page1), y
-    cmp #$20
-    bne cus_hit
-    // is there a character under our bottom right?
+    lda spritecol1, x
+    sta num1
     ldy spritecol2, x
+cus_cb_loop:   
     lda (zero_page1), y
-    cmp #$20
-    bne cus_hit
+    cmp #$80
+    bcs cus_hit
+cus_cb_next_char:
+    dey
+    cpy num1
+    bcs cus_cb_loop
     jmp cus_no_hit
 cus_hit:
 // store char we collided with (TODO: may be able to get rid of this)
     sta spritecollisionchr, x 
-cus_font:
-    cmp #$40
-    bcs cus_background
-    lda #$01
-    jmp cus_store_char_type
-cus_background:
-    cmp #$80
-    bcs cus_solid_platform
-    lda #02
-    jmp cus_store_char_type
 cus_solid_platform:
     lda #$04
     jmp cus_store_char_type

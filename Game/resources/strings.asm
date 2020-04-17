@@ -2,7 +2,9 @@
 #import "../config/symbols.asm"
 
 title: 
-    .text "awesomest game"
+    .text "aweso"
+    .byte $80, $80
+    .text "mest game"
     .byte $ff
 copyright:
     .text "2020 gulotta games"

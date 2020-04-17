@@ -5,7 +5,7 @@
 .const irq_end_sav      = $03a1
 .const sprite_data      = $0880
 .const sprite_meta      = $2000
-.const subroutines      = $2100        
+.const subroutines      = $2200        
 .const zero_page1       = $fc
 .const zero_page2       = $fe
 .const screen_cols      = 40
@@ -31,14 +31,15 @@ spritecolormulti1:  .byte   $0c
 spritecolormulti2:  .byte   $0a
 
 // sprite locations and other attributes
-spritex:            .byte   $28, $80, $00, $00, $00, $00, $00, $00
+spritex:            .byte   $a8, $80, $00, $00, $00, $00, $00, $00
 spritey:            .byte   $78, $48, $00, $00, $00, $00, $00, $00
 spritemsb:          .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritemovement:     .byte   $FC, $00, $00, $00, $00, $00, $00, $00
 spritemovementspd:  .byte   $02, $00, $00, $00, $00, $00, $00, $00
 spritejumpdistcov:  .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritejumpdist:     .byte   $20, $00, $00, $00, $00, $00, $00, $00
-spritejumpspeed:    .byte   $03, $00, $00, $00, $00, $00, $00, $00
+spritejumpspeed:    .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spriteinitialjs:    .byte   $06, $00, $00, $00, $00, $00, $00, $00
 spritefallspeed:    .byte   $04, $01, $00, $00, $00, $00, $00, $00
 spritecollisionchr: .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritechartype:     .byte   $00, $00, $00, $00, $00, $00, $00, $00
@@ -46,8 +47,8 @@ spritecollisiondir: .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritecollisionspr: .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite frame offsets
-spriteoffsetx1:     .byte   $05, $03, $00, $00, $00, $00, $00, $00 
-spriteoffsetx2:     .byte   $0e, $16, $00, $00, $00, $00, $00, $00
+spriteoffsetx1:     .byte   $06, $02, $00, $00, $00, $00, $00, $00 
+spriteoffsetx2:     .byte   $0a, $14, $00, $00, $00, $00, $00, $00
 spriteoffsety1:     .byte   $05, $05, $00, $00, $00, $00, $00, $00
 spriteoffsety2:     .byte   $0f, $0f, $00, $00, $00, $00, $00, $00
 

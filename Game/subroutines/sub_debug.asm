@@ -8,39 +8,41 @@ jsr draw_border_bottom
 //debug_char_under_sprite()
 rts
 
+/*
+    This method will fill in the characters the sprite is in
+*/
 draw_char_boundaries:
-ldx #0
-draw_char_boundary_loop:
-jsr zp_screen_pointer
-// draw character top left
-ldy spriterow1, x
-next_row_debug:
-beq draw_char
-jsr zp_screen_pointer_next_row
-dey
-jmp next_row_debug
-draw_char:
-ldy spritecol1,x
-lda #$A0 
-sta (zero_page1), y
-
-// draw character bottom right
-jsr zp_screen_pointer
-ldy spriterow2, x
-next_row_debug2:
-beq draw_char2
-jsr zp_screen_pointer_next_row
-dey
-jmp next_row_debug2
-draw_char2:
-ldy spritecol2,x
-lda #$A0 
-sta (zero_page1), y
-
-inx
-cpx #8
-beq exit_debug
-jmp draw_char_boundary_loop
+    ldx #0
+dcb_loop:
+    // is this sprite on?
+    lda spriteon, x
+    beq dcb_next_sprite
+    ldy spriterow2, x
+    jsr zp_screen_pointer
+dcb_next_row:
+    beq dcb_check_bottom
+    jsr zp_screen_pointer_next_row
+    dey
+    jmp dcb_next_row
+dcb_check_bottom:
+    lda spritecol1, x
+    sta num1
+    ldy spritecol2, x
+dcb_cb_loop:   
+    lda (zero_page1), y
+    cmp #$20
+    bne dcb_next_sprite
+    lda #$46
+    sta (zero_page1), y
+    dey
+    cpy num1
+    bcs dcb_cb_loop
+dcb_next_sprite:
+    inx
+    cpx #$08
+    bne dcb_loop
+    // TODO: COLLISIONS ON LEFT/RIGHT/ABOVE
+    rts
 
 draw_border_bottom:
 

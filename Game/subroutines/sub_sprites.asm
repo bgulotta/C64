@@ -110,6 +110,11 @@ csa_jump:
     clc
     adc spritejumpspeed, x 
     sta spritejumpdistcov, x
+    
+    lda spritejumpspeed, x
+    cmp #$01
+    beq csa_next_sprite
+    dec spritejumpspeed, x
     jmp csa_next_sprite
 csa_check_fall:
     // do we have a character under us?

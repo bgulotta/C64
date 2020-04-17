@@ -50,6 +50,11 @@ rcc_move_sprite_char_top:
     sbc spriteoffsety1, x
     sta spritey, x
 rcc_jump_on:
+    // reset jump meta data
+    lda #$0
+    sta spritejumpdistcov, x
+    lda spriteinitialjs, x
+    sta spritejumpspeed, x 
     // turn on jumping
     lda spritemovement, x
     ora #$10

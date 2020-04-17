@@ -54,9 +54,6 @@ reset_irq:
 
 // custom interrupt routine
 irq:
-    // acknowledge the raster interrupt
-    dec vic_intrpt_sts  
-
     //jsr color_wash
     jsr check_input
     jsr check_sprite_airborne
@@ -67,5 +64,9 @@ irq:
     jsr respond_char_collision
     jsr move_sprites
     jsr debug_output
+
+    // acknowledge the raster interrupt
+    dec vic_intrpt_sts  
+
     jmp (irq_beg_sav)
 
