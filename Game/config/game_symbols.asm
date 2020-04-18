@@ -21,8 +21,8 @@
 .const copyright_offset = screen_cols/2 - (copyright_length/2) + screen_cols * 22
 
 *=sprite_meta "Sprite Meta"
-spriteon:           .byte   $01, $01, $00, $00, $00, $00, $00, $00
-spritepointer:      .byte   $22, $23, $00, $00, $00, $00, $00, $00
+spriteon:           .byte   $01, $00, $00, $00, $00, $00, $00, $00
+spritepointer:      .byte   $23, $22, $00, $00, $00, $00, $00, $00
                           
 // sprite color data
 spritecolormenable: .byte   $01, $01, $00, $00, $00, $00, $00, $00
@@ -40,13 +40,12 @@ spritejumpdistcov:  .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritejumpdist:     .byte   $1e, $00, $00, $00, $00, $00, $00, $00
 spritejumpspeed:    .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spriteinitialjs:    .byte   $06, $00, $00, $00, $00, $00, $00, $00
-spritefallspeed:    .byte   $04, $01, $00, $00, $00, $00, $00, $00
-spritecollisionspr: .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritecollisiondir: .byte   $00, $00, $00, $00, $00, $00, $00, $00 // bit 0 above, bit 1 below, bit 2 left, bit 3 right collision
-spritecollisionabv: .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritecollisionblw: .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritecollisionlft: .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritecollisionrght: .byte  $00, $00, $00, $00, $00, $00, $00, $00
+spritefallspeed:     .byte  $04, $01, $00, $00, $00, $00, $00, $00
+spritecollisionspr:  .byte  $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisiondir:  .byte  $00, $00, $00, $00, $00, $00, $00, $00 // bit 0 above, bit 1 below, bit 2 left, bit 3 right collision
+spritecollisionup:   .byte  $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisiondown: .byte  $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisionside: .byte  $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite frame offsets
 spriteoffsetx1:     .byte   $06, $02, $00, $00, $00, $00, $00, $00 

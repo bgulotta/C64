@@ -61,12 +61,10 @@ dcc_next_sprite:
 dcc_loop:
     // clear out any previous collision meta data
     lda #$0
-    sta spritecollisionabv, x
-    sta spritecollisionblw, x
-    sta spritecollisionlft, x 
-    sta spritecollisionrght, x 
     sta spritecollisiondir, x
-
+    sta spritecollisionup, x
+    sta spritecollisiondown, x
+    sta spritecollisionside, x 
     // is this sprite on?
     lda spriteon, x
     beq dcc_next_sprite
@@ -90,6 +88,8 @@ dcc_check_sprite:
     sbc spriterow1, x
     sta num2
     inc num2
+    // used to determine the direction of the collision
+    sta num3
 dcc_row_loop:
     // go to the next row
     jsr zp_screen_pointer_next_row
@@ -98,7 +98,6 @@ dcc_row_loop:
 dcc_column_loop:   
     // is this character one we need to act on?
     lda (zero_page1), y
-    sta vic_scr_ram
     cmp #$80
     bcs dcc_hit
 dcc_check_finished:
@@ -112,8 +111,6 @@ dcc_check_finished:
     beq dcc_next_sprite
     jmp dcc_row_loop
 dcc_hit:
-    // store char we collided with (TODO: may be able to get rid of this)
-    //sta spritecollisionchr, x     
     cmp #$f0 // Death (spikes etc)
     bcs dcc_hit_deadly_platform
     cmp #$c0 // Solid platforms (cannot pass through)
@@ -125,28 +122,47 @@ dcc_hit:
     jmp dcc_hit_collapsing_platform // Collapsing platforms
 dcc_hit_deadly_platform:
     lda #$10
-    jmp dcc_store_char_type
+    jmp dcc_determine_direction
 dcc_hit_solid_platform:
     lda #$08
-    jmp dcc_store_char_type
+    jmp dcc_determine_direction
 dcc_hit_semi_solid_platform:
     lda #$04
-    jmp dcc_store_char_type
+    jmp dcc_determine_direction
 dcc_hit_conveyers_platform:
     lda #$02
-    jmp dcc_store_char_type
+    jmp dcc_determine_direction
 dcc_hit_collapsing_platform:
     lda #$01
-    jmp dcc_store_char_type
-dcc_store_char_type:
-
-    // TODO: determine collision direction
-    // and store int the correct type
-    sta spritecollisionblw, x
-
-    // TODO: store collision direction
-    lda spritecollisiondir, x
-    ora #$02
+    jmp dcc_determine_direction
+dcc_determine_direction:
+    lda num2
+    cmp num3
+    bcs dcc_set_direction_top
+    cmp #$01
+    beq dcc_set_direction_down
+dcc_set_direction_side:
+.break
+    sta spritecollisionside, x
+    cpy num1
+    beq dcc_set_direction_left
+dcc_set_direction_right:
+    lda #$08
     sta spritecollisiondir, x
-
+    jmp dcc_hit_done
+dcc_set_direction_left:
+    lda #$04
+    sta spritecollisiondir, x
+    jmp dcc_hit_done
+dcc_set_direction_top:
+    sta spritecollisionup, x
+    lda #$01
+    sta spritecollisiondir, x
+    jmp dcc_hit_done
+dcc_set_direction_down:
+    sta spritecollisiondown, x
+    lda #$02
+    sta spritecollisiondir, x
+    jmp dcc_hit_done
+dcc_hit_done:
     jmp dcc_check_finished

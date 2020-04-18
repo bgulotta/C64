@@ -4,6 +4,7 @@
 debug_output:
 
 jsr draw_border_bottom
+draw_hill()
 //DrawCharBoundaries()
 //debug_char_under_sprite()
 rts
@@ -122,6 +123,27 @@ bne draw_char_border_bottom
 exit_debug:
 rts
 
+.macro draw_hill() {
+    draw_border_bottom:
+
+jsr zp_screen_pointer
+ldy #19
+
+next_row_border_bottom:
+beq draw_char_border_bottom
+jsr zp_screen_pointer_next_row
+dey
+jmp next_row_border_bottom
+
+draw_char_border_bottom:
+lda #$80
+sta (zero_page1), y
+iny
+cpy #$0c
+bne draw_char_border_bottom
+exit_debug:
+rts
+}
 
 .macro debug_char_under_sprite () {
 char_under_sprite:

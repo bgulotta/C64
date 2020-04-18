@@ -30,7 +30,7 @@ rcc_next_sprite:
     bne rcc_loop
     jmp rcc_exit
 rcc_char_below:
-    lda spritecollisionblw, x
+    lda spritecollisiondown, x
     and #$10 // did we collide with a platform type?
     beq rcc_move_sprite_char_top
     jmp rcc_next_sprite    

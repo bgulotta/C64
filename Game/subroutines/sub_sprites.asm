@@ -101,7 +101,6 @@ csa_next_sprite_loop:
     // are we in a jump? 
     lda spritemovement, x
     and #$10
-    cmp #$00
     beq csa_jump
     jmp csa_check_fall
 csa_jump:    
