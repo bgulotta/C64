@@ -37,9 +37,9 @@ spritecolormulti1:  .byte   $0c
 spritecolormulti2:  .byte   $0a
 
 // sprite locations and other attributes
-spritex:            .byte   $96, $80, $00, $00, $00, $00, $00, $00
+spritex:            .byte   $0a, $80, $00, $00, $00, $00, $00, $00
 spritey:            .byte   $78, $48, $00, $00, $00, $00, $00, $00
-spritemsb:          .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spritemsb:          .byte   $01, $00, $00, $00, $00, $00, $00, $00
 
 // sprite hit boxes
 spritex1:	        .byte   $00, $00, $00, $00, $00, $00, $00, $00

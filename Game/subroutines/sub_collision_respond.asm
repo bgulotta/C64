@@ -15,26 +15,50 @@ rts
     actions
 */
 respond_char_collision:
-    ldx #$0
-rcc_loop:
-    // is this sprite on?
-    lda spriteon, x
-    beq rcc_next_sprite
-    // is there a character under us?
-    lda spritecollisiondir, x
-    and #$02
-    bne rcc_char_below
+    ldx #$ff
 rcc_next_sprite:
     inx
     cpx #$08
     bne rcc_loop
     jmp rcc_exit
-rcc_char_below:
+rcc_loop:
+    // is this sprite on?
+    lda spriteon, x
+    beq rcc_next_sprite
+    // store which directions we have collided with for comparision below
+    lda spritecollisiondir, x
+    sta num1
+check_collision_up:
+    lda #$01
+    bit num1
+    bne respond_collision_up
+check_collision_down:
+    lda #$02
+    bit num1
+    bne respond_collision_down
+check_collision_left:
+    lda #$04
+    bit num1
+    bne respond_collision_left
+check_collision_right:
+    lda #$08
+    bit num1
+    bne respond_collision_right
+    jmp rcc_next_sprite  
+respond_collision_up:
+    // TODO: add top collision logic
+    jmp check_collision_down
+respond_collision_left:
+    // TODO: add left collision logic
+    jmp check_collision_right
+respond_collision_right:
+    // TODO: add right collision logic
+    jmp rcc_next_sprite
+respond_collision_down:
     lda spritecollisiondown, x
     and #$10 // did we collide with a platform type?
-    beq rcc_move_sprite_char_top
-    jmp rcc_next_sprite    
-rcc_move_sprite_char_top:
+    bne check_collision_left
+move_sprite_to_top_of_char:
     // this method makes sure that the sprite
     // is always on the top of the character
     lda spritey, x
@@ -49,7 +73,7 @@ rcc_move_sprite_char_top:
     sbc spriteoffsety2, x
     sbc spriteoffsety1, x
     sta spritey, x
-rcc_jump_on:
+reset_jump:
     // reset jump meta data
     lda #$0
     sta spritejumpdistcov, x
@@ -59,6 +83,6 @@ rcc_jump_on:
     lda spritemovement, x
     ora #$10
     sta spritemovement, x
-    jmp rcc_next_sprite
+    jmp check_collision_left    
 rcc_exit:
     rts
