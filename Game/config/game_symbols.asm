@@ -21,7 +21,7 @@
 .const copyright_offset = screen_cols/2 - (copyright_length/2) + screen_cols * 22
 
 *=sprite_meta "Sprite Meta"
-spriteon:           .byte   $01, $00, $00, $00, $00, $00, $00, $00
+spriteon:           .byte   $01, $01, $00, $00, $00, $00, $00, $00
 spritepointer:      .byte   $22, $23, $00, $00, $00, $00, $00, $00
 
 // sprite frame offsets

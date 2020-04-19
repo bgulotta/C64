@@ -31,46 +31,66 @@ draw_char_bounadaries_done:
 rts
 
 .macro DrawCollisionInfo(){
-
+ldx #$ff
+jsr zp_screen_pointer
+next_sprite:
+inx
+cpx #$08
+beq draw_collision_info_done
+jsr zp_screen_pointer_next_row
 lda #$30
-sta vic_scr_ram
-sta vic_scr_ram + 1
-sta vic_scr_ram + 2
-sta vic_scr_ram + 3
+ldy #$02
+sta (zero_page1), y
+iny
+sta (zero_page1), y
+iny
+sta (zero_page1), y
+iny
+sta (zero_page1), y
+
+lda spriteon, x
+beq next_sprite
+
+lda spritecollisiondir, x
+sta num1
 
 check_collision_up:
 lda #$01
-bit spritecollisiondir
+bit num1
 bne respond_collision_up
 check_collision_down:
 lda #$02
-bit spritecollisiondir
+bit num1
 bne respond_collision_down
 check_collision_left:
 lda #$04
-bit spritecollisiondir
+bit num1
 bne respond_collision_left
 check_collision_right:
 lda #$08
-bit spritecollisiondir
+bit num1
 bne respond_collision_right
-jmp draw_collision_info_done
+jmp next_sprite
 respond_collision_up:
 lda #$31
-sta vic_scr_ram
+ldy #$02
+sta (zero_page1), y
 jmp check_collision_down
 respond_collision_down:
 lda #$31
-sta vic_scr_ram + 1
+ldy #$03
+sta (zero_page1), y
 jmp check_collision_left
 respond_collision_left:
 lda #$31
-sta vic_scr_ram + 2
+ldy #$04
+sta (zero_page1), y
 jmp check_collision_right
 respond_collision_right:
 lda #$31
-sta vic_scr_ram + 3
-jmp draw_collision_info_done
+ldy #$05
+sta (zero_page1), y
+jmp next_sprite
 }
 /*
     This method will fill in the characters the sprite is in
