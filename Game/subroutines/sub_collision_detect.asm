@@ -82,20 +82,17 @@ dcc_check_sprite:
     // y = num1 current row is finished
     lda spritecol1, x
     sta num1
-    // num2 = 0 sprite finished
-    sec 
+    // num2 = num3 all rows finished
     lda spriterow2, x
-    sbc spriterow1, x
-    sta num2
-    inc num2
-    // used to determine the direction of the collision
     sta num3
+    lda spriterow1, x
+    sta num2
 dcc_row_loop:
     // go to the next row
     jsr zp_screen_pointer_next_row
     // start at the last column
     ldy spritecol2, x
-dcc_column_loop:   
+dcc_column_loop:  
     // is this character one we need to act on?
     lda (zero_page1), y
     cmp #$80
@@ -106,10 +103,11 @@ dcc_check_finished:
     cpy num1
     bcs dcc_column_loop
     // are we done with all rows?
-    dec num2
-    lda num2
-    beq dcc_next_sprite
-    jmp dcc_row_loop
+    dec num3
+    lda num3
+    cmp num2
+    bcs dcc_row_loop
+    jmp dcc_next_sprite
 dcc_hit:
     cmp #$f0 // Death (spikes etc)
     bcs dcc_hit_deadly_platform
@@ -136,30 +134,34 @@ dcc_hit_collapsing_platform:
     lda #$01
     jmp dcc_determine_direction
 dcc_determine_direction:
-    lda num2
-    cmp num3
-    bcs dcc_set_direction_top
-    cmp #$01
+    pha
+    lda num3
+    cmp spriterow2, x
+    beq dcc_set_direction_top
+    cmp spriterow1, x
     beq dcc_set_direction_down
 dcc_set_direction_side:
-.break
+    pla
     sta spritecollisionside, x
-    cpy num1
-    beq dcc_set_direction_left
-dcc_set_direction_right:
-    lda #$08
-    sta spritecollisiondir, x
-    jmp dcc_hit_done
+    tya
+    cmp spritecol2, x
+    beq dcc_set_direction_right
 dcc_set_direction_left:
     lda #$04
     sta spritecollisiondir, x
     jmp dcc_hit_done
+dcc_set_direction_right:
+    lda #$08
+    sta spritecollisiondir, x
+    jmp dcc_hit_done
 dcc_set_direction_top:
+    pla
     sta spritecollisionup, x
     lda #$01
     sta spritecollisiondir, x
     jmp dcc_hit_done
 dcc_set_direction_down:
+    pla 
     sta spritecollisiondown, x
     lda #$02
     sta spritecollisiondir, x

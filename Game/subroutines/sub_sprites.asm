@@ -211,10 +211,11 @@ adc spriteoffsety2, x
 sta spritey2, x
 
 // sprite row1
+sec
 lda spritey1, x     
 sbc #screen_yoffset   
 sta arithmetic_value + 1
-lda #0
+lda #$00
 sta arithmetic_value
 
 jsr divide_by_8
@@ -222,6 +223,7 @@ lda arithmetic_value + 1
 sta spriterow1, x
 
 // sprite row2
+sec
 lda spritey2, x      
 sbc #screen_yoffset   
 sta arithmetic_value + 1

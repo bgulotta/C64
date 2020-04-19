@@ -4,8 +4,8 @@
 debug_output:
 
 jsr draw_border_bottom
-draw_hill()
 //DrawCharBoundaries()
+draw_hill()
 //debug_char_under_sprite()
 rts
 
@@ -43,12 +43,11 @@ dcc_check_sprite:
     // y = num1 current row is finished
     lda spritecol1, x
     sta num1
-    // num2 = 0 sprite finished
-    sec 
+    // num2 = num3 all rows finished
     lda spriterow2, x
-    sbc spriterow1, x
+    sta num3
+    lda spriterow1, x
     sta num2
-    inc num2
 dcc_row_loop:
     // go to the next row
     jsr zp_screen_pointer_next_row
@@ -64,10 +63,11 @@ dcc_check_finished:
     cpy num1
     bcs dcc_column_loop
     // are we done with all rows?
-    dec num2
-    lda num2
-    beq dcc_next_sprite
-    jmp dcc_row_loop
+    dec num3
+    lda num3
+    cmp num2
+    bcs dcc_row_loop
+    jmp dcc_next_sprite
 }
 
 draw_char_boundaries:
