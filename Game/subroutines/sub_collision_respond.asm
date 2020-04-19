@@ -27,22 +27,22 @@ rcc_loop:
     beq rcc_next_sprite
     // store which directions we have collided with for comparision below
     lda spritecollisiondir, x
-    sta num1
+    sta num4
 check_collision_up:
     lda #$01
-    bit num1
+    bit num4
     bne respond_collision_up
 check_collision_down:
     lda #$02
-    bit num1
+    bit num4
     bne respond_collision_down
 check_collision_left:
     lda #$04
-    bit num1
+    bit num4
     bne respond_collision_left
 check_collision_right:
     lda #$08
-    bit num1
+    bit num4
     bne respond_collision_right
     jmp rcc_next_sprite  
 /*
@@ -84,7 +84,7 @@ respond_collision_left:
     // TODO: handle MSB
     clc
     lda spritex, x
-    adc spritemovement, x
+    adc spritemovementspd, x
     sta spritex, x
     jmp check_collision_right
 respond_collision_right:
@@ -98,7 +98,7 @@ respond_collision_right:
     // TODO: handle MSB
     sec
     lda spritex, x
-    sbc spritemovement, x
+    sbc spritemovementspd, x
     sta spritex, x
     jmp rcc_next_sprite
 respond_collision_down:
@@ -136,8 +136,13 @@ reset_jump:
     sta spritemovement, x
     rts
 stop_jump:
+    // if we are in a jump then stop it
+    lda spritemovement, x
+    and #$10
+    bne sj_exit
     lda spritejumpdist, x
     sta spritejumpdistcov, x
+sj_exit:
     rts
 rcc_exit:
     rts

@@ -26,13 +26,30 @@ rts
 debug_output:
 DrawCollisionInfo()
 draw_collision_info_done:
+DrawMovementInfo()
+draw_movement_info_done:
 //DrawCharBoundaries()
 draw_char_bounadaries_done:
 rts
 
+/*
+This function will draw all the collision flags for debugging purposes
+*/
 .macro DrawCollisionInfo(){
 ldx #$ff
 jsr zp_screen_pointer
+lda #$15
+ldy #$02
+sta (zero_page1), y
+iny 
+lda #$04
+sta (zero_page1), y
+iny 
+lda #$0C
+sta (zero_page1), y
+iny 
+lda #$12
+sta (zero_page1), y
 next_sprite:
 inx
 cpx #$08
@@ -92,11 +109,105 @@ ldy #$05
 sta (zero_page1), y
 jmp next_sprite
 }
+
+/* 
+This function will draw all the movement flags for debugging purposes
+*/
+.macro DrawMovementInfo(){
+ldx #$ff
+jsr zp_screen_pointer
+ldy #33
+lda #$15
+sta (zero_page1), y
+iny 
+lda #$04
+sta (zero_page1), y
+iny 
+lda #$0C
+sta (zero_page1), y
+iny 
+lda #$12
+sta (zero_page1), y
+iny
+lda #$0A
+sta (zero_page1), y
+next_sprite:
+inx
+cpx #$08
+beq draw_movement_info_done
+jsr zp_screen_pointer_next_row
+lda #$30
+ldy #33
+sta (zero_page1), y
+iny
+sta (zero_page1), y
+iny
+sta (zero_page1), y
+iny
+sta (zero_page1), y
+iny
+sta (zero_page1), y
+
+lda spriteon, x
+beq next_sprite
+
+lda spritemovement, x
+sta num1
+
+check_movement_up:
+lda #$01
+bit num1
+bne respond_movement_up
+check_movement_down:
+lda #$02
+bit num1
+bne respond_movement_down
+check_movement_left:
+lda #$04
+bit num1
+bne respond_movement_left
+check_movement_right:
+lda #$08
+bit num1
+bne respond_movement_right
+jmp check_movement_jump
+check_movement_jump:
+lda #$10
+bit num1
+bne respond_movement_jump
+jmp next_sprite
+respond_movement_up:
+lda #$31
+ldy #33
+sta (zero_page1), y
+jmp check_movement_down
+respond_movement_down:
+lda #$31
+ldy #34
+sta (zero_page1), y
+jmp check_movement_left
+respond_movement_left:
+lda #$31
+ldy #35
+sta (zero_page1), y
+jmp check_movement_right
+respond_movement_right:
+lda #$31
+ldy #36
+sta (zero_page1), y
+jmp check_movement_jump
+respond_movement_jump:
+lda #$31
+ldy #37
+sta (zero_page1), y
+jmp next_sprite
+}
+
 /*
     This method will fill in the characters the sprite is in
 */
 .macro DrawCharBoundaries () {
-                /* 
+/* 
     This routine checks for sprite to character collisions and sets appropriate
     meta data for collision routine to respond accordingly
 */
