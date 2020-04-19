@@ -3,7 +3,6 @@
 
 title: 
     .text "aweso"
-    .byte $80, $80
     .text "mest game"
     .byte $ff
 copyright:

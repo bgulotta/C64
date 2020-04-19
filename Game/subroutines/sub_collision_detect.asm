@@ -147,23 +147,27 @@ dcc_set_direction_side:
     cmp spritecol2, x
     beq dcc_set_direction_right
 dcc_set_direction_left:
-    lda #$04
+    lda spritecollisiondir, x
+    ora #$04
     sta spritecollisiondir, x
     jmp dcc_hit_done
 dcc_set_direction_right:
-    lda #$08
+    lda spritecollisiondir, x
+    ora #$08
     sta spritecollisiondir, x
     jmp dcc_hit_done
 dcc_set_direction_top:
     pla
     sta spritecollisionup, x
-    lda #$01
+    lda spritecollisiondir, x
+    ora #$01
     sta spritecollisiondir, x
     jmp dcc_hit_done
 dcc_set_direction_down:
     pla 
     sta spritecollisiondown, x
-    lda #$02
+    lda spritecollisiondir, x
+    ora #$02
     sta spritecollisiondir, x
     jmp dcc_hit_done
 dcc_hit_done:

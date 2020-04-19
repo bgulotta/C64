@@ -1,14 +1,77 @@
 #importonce
 #import "sub_zero_page.asm"
+#import "../resources/maps/debug.asm"
 
-debug_output:
+zp_map_pointer:
+    lda #<debug_map
+    sta zero_page2 
+    lda #>debug_map
+    sta zero_page2 + 1
+    rts
+zp_map_pointer_next_row:
+    clc
+    lda zero_page2         
+    adc #screen_cols
+    sta zero_page2
+    lda zero_page2 + 1
+    adc #$00
+    sta zero_page2 + 1    
+    rts
 
-jsr draw_border_bottom
-//DrawCharBoundaries()
-draw_hill()
-//debug_char_under_sprite()
+draw_map:
+DrawMap()
+draw_map_done:
 rts
 
+debug_output:
+DrawCollisionInfo()
+draw_collision_info_done:
+//DrawCharBoundaries()
+draw_char_bounadaries_done:
+rts
+
+.macro DrawCollisionInfo(){
+
+lda #$30
+sta vic_scr_ram
+sta vic_scr_ram + 1
+sta vic_scr_ram + 2
+sta vic_scr_ram + 3
+
+check_collision_up:
+lda #$01
+bit spritecollisiondir
+bne respond_collision_up
+check_collision_down:
+lda #$02
+bit spritecollisiondir
+bne respond_collision_down
+check_collision_left:
+lda #$04
+bit spritecollisiondir
+bne respond_collision_left
+check_collision_right:
+lda #$08
+bit spritecollisiondir
+bne respond_collision_right
+jmp draw_collision_info_done
+respond_collision_up:
+lda #$31
+sta vic_scr_ram
+jmp check_collision_down
+respond_collision_down:
+lda #$31
+sta vic_scr_ram + 1
+jmp check_collision_left
+respond_collision_left:
+lda #$31
+sta vic_scr_ram + 2
+jmp check_collision_right
+respond_collision_right:
+lda #$31
+sta vic_scr_ram + 3
+jmp draw_collision_info_done
+}
 /*
     This method will fill in the characters the sprite is in
 */
@@ -24,7 +87,7 @@ dcc_next_sprite:
     // are we finished with all sprites?
     cpx #$08
     bcc dcc_loop
-    rts
+    jmp draw_char_bounadaries_done
 dcc_loop:
     // is this sprite on?
     lda spriteon, x
@@ -70,103 +133,26 @@ dcc_check_finished:
     jmp dcc_next_sprite
 }
 
-draw_char_boundaries:
-    ldx #0
-dcb_loop:
-    // is this sprite on?
-    lda spriteon, x
-    beq dcb_next_sprite
-    ldy spriterow2, x
-    jsr zp_screen_pointer
-dcb_next_row:
-    beq dcb_check_bottom
-    jsr zp_screen_pointer_next_row
-    dey
-    jmp dcb_next_row
-dcb_check_bottom:
-    lda spritecol1, x
-    sta num1
-    ldy spritecol2, x
-dcb_cb_loop:   
-    lda (zero_page1), y
-    cmp #$20
-    bne dcb_next_sprite
-    lda #$46
-    sta (zero_page1), y
-    dey
-    cpy num1
-    bcs dcb_cb_loop
-dcb_next_sprite:
-    inx
-    cpx #$08
-    bne dcb_loop
-    // TODO: COLLISIONS ON LEFT/RIGHT/ABOVE
-    rts
-
-draw_border_bottom:
-
+.macro DrawMap() {
+jsr zp_map_pointer
 jsr zp_screen_pointer
-ldy #20
-
-next_row_border_bottom:
-beq draw_char_border_bottom
-jsr zp_screen_pointer_next_row
-dey
-jmp next_row_border_bottom
-
-draw_char_border_bottom:
-lda #$80
+// row counter
+ldx #$00
+draw_row_loop:
+// column counter
+ldy #$00
+draw_col_loop:
+lda (zero_page2), y
 sta (zero_page1), y
 iny
 cpy #screen_cols
-bne draw_char_border_bottom
-exit_debug:
-rts
-
-.macro draw_hill() {
-    draw_border_bottom:
-
-jsr zp_screen_pointer
-ldy #19
-
-next_row_border_bottom:
-beq draw_char_border_bottom
-jsr zp_screen_pointer_next_row
-dey
-jmp next_row_border_bottom
-
-draw_char_border_bottom:
-lda #$80
-sta (zero_page1), y
-iny
-cpy #$0c
-bne draw_char_border_bottom
-exit_debug:
-rts
-}
-
-.macro debug_char_under_sprite () {
-char_under_sprite:
-
-ldx #0
-cus_next_sprite:
-ldy spriterow2, x
-jsr zp_screen_pointer
-cus_next_row:
-beq check_bottom
-jsr zp_screen_pointer_next_row
-dey
-jmp cus_next_row
-check_bottom:
-ldy spritecol1, x
-lda (zero_page1), y
-cmp #$20
-bne cus_hit
-inc spritey, x
-cus_hit:
+bcc draw_col_loop
 inx
-cpx #$08
-bne cus_next_sprite
-rts                
+cpx #screen_rows
+bcc draw_next_row
+jmp draw_map_done
+draw_next_row:
+jsr zp_screen_pointer_next_row
+jsr zp_map_pointer_next_row
+jmp draw_row_loop
 }
-

@@ -4,7 +4,7 @@
 .const irq_beg_sav      = $03a0
 .const irq_end_sav      = $03a1
 .const sprite_data      = $0880
-.const sprite_meta      = $2900
+.const sprite_meta      = $2c00
 .const subroutines      = $2200        
 .const zero_page1       = $fc
 .const zero_page2       = $fe
@@ -37,9 +37,9 @@ spritecolormulti1:  .byte   $0c
 spritecolormulti2:  .byte   $0a
 
 // sprite locations and other attributes
-spritex:            .byte   $0a, $80, $00, $00, $00, $00, $00, $00
+spritex:            .byte   $30, $80, $00, $00, $00, $00, $00, $00
 spritey:            .byte   $78, $48, $00, $00, $00, $00, $00, $00
-spritemsb:          .byte   $01, $00, $00, $00, $00, $00, $00, $00
+spritemsb:          .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite hit boxes
 spritex1:	        .byte   $00, $00, $00, $00, $00, $00, $00, $00
@@ -58,7 +58,7 @@ spriterow2:         .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite movement attributes
 spritemovement:     .byte   $FC, $00, $00, $00, $00, $00, $00, $00
-spritemovementspd:  .byte   $02, $00, $00, $00, $00, $00, $00, $00
+spritemovementspd:  .byte   $01, $00, $00, $00, $00, $00, $00, $00
 spritejumpdistcov:  .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritejumpdist:     .byte   $1e, $00, $00, $00, $00, $00, $00, $00
 spritejumpspeed:    .byte   $00, $00, $00, $00, $00, $00, $00, $00

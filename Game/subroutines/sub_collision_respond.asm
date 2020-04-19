@@ -45,19 +45,69 @@ check_collision_right:
     bit num1
     bne respond_collision_right
     jmp rcc_next_sprite  
+/*
+dcc_hit_deadly_platform:
+    lda #$10
+    jmp dcc_determine_direction
+dcc_hit_solid_platform:
+    lda #$08
+    jmp dcc_determine_direction
+dcc_hit_semi_solid_platform:
+    lda #$04
+    jmp dcc_determine_direction
+dcc_hit_conveyers_platform:
+    lda #$02
+    jmp dcc_determine_direction
+dcc_hit_collapsing_platform:
+    lda #$01
+    jmp dcc_determine_direction
+*/
 respond_collision_up:
     // TODO: add top collision logic
+    lda spritecollisionup, x
+    and #$10 // did we collide with a deadly platform type?  
+    bne check_collision_down // TODO: handle deadly platform collision
+    lda spritecollisionup, x
+    and #$08 // did we collide with a solid platform type?
+    beq check_collision_down
+    jsr stop_jump
     jmp check_collision_down
 respond_collision_left:
     // TODO: add left collision logic
+    lda spritecollisionside, x
+    and #$10 // did we collide with a deadly platform type?  
+    bne check_collision_right // TODO: handle deadly platform collision
+    lda spritecollisionside, x
+    and #$08 // did we collide with a solid platform type?
+    beq check_collision_right
+    jsr stop_jump
+    // TODO: handle MSB
+    clc
+    lda spritex, x
+    adc spritemovement, x
+    sta spritex, x
     jmp check_collision_right
 respond_collision_right:
-    // TODO: add right collision logic
+    lda spritecollisionside, x
+    and #$10 // did we collide with a deadly platform type?  
+    bne rcc_next_sprite // TODO: handle deadly platform collision
+    lda spritecollisionside, x
+    and #$08 // did we collide with a solid platform type?
+    beq rcc_next_sprite
+    jsr stop_jump
+    // TODO: handle MSB
+    sec
+    lda spritex, x
+    sbc spritemovement, x
+    sta spritex, x
     jmp rcc_next_sprite
 respond_collision_down:
     lda spritecollisiondown, x
-    and #$10 // did we collide with a platform type?
-    bne check_collision_left
+    and #$10 // did we collide with a deadly platform type?
+    bne check_collision_left // TODO: handle deadly platform collision
+    jsr move_sprite_to_top_of_char
+    jsr reset_jump
+    jmp check_collision_left
 move_sprite_to_top_of_char:
     // this method makes sure that the sprite
     // is always on the top of the character
@@ -73,6 +123,7 @@ move_sprite_to_top_of_char:
     sbc spriteoffsety2, x
     sbc spriteoffsety1, x
     sta spritey, x
+    rts
 reset_jump:
     // reset jump meta data
     lda #$0
@@ -83,6 +134,10 @@ reset_jump:
     lda spritemovement, x
     ora #$10
     sta spritemovement, x
-    jmp check_collision_left    
+    rts
+stop_jump:
+    lda spritejumpdist, x
+    sta spritejumpdistcov, x
+    rts
 rcc_exit:
     rts

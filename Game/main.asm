@@ -7,6 +7,7 @@ main:
     jsr setup_vic_memory
     jsr init_screen
     jsr init_title_screen
+    jsr draw_map
     jsr setup_sprites
     jsr setup_irq
 check_stop:
