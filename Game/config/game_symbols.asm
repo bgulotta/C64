@@ -63,10 +63,10 @@ spriterow2:         .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritemovement:     .byte   $FC, $00, $00, $00, $00, $00, $00, $00
 spritemovementspd:  .byte   $02, $00, $00, $00, $00, $00, $00, $00
 spritejumpdistcov:  .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritejumpdist:     .byte   $16, $00, $00, $00, $00, $00, $00, $00
+spritejumpdist:     .byte   $1e, $00, $00, $00, $00, $00, $00, $00
 spritejumpspeed:    .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spriteinitialjs:    .byte   $06, $00, $00, $00, $00, $00, $00, $00
-spritefallspeed:     .byte  $04, $01, $00, $00, $00, $00, $00, $00
+spriteinitialjs:    .byte   $07, $00, $00, $00, $00, $00, $00, $00
+spritefallspeed:    .byte   $04, $01, $00, $00, $00, $00, $00, $00
 
 // sprite collision attributes
 spritecollisionspr:  .byte  $00, $00, $00, $00, $00, $00, $00, $00

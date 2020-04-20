@@ -100,13 +100,19 @@ dcc_column_loop:
 dcc_check_finished:
     // are we done with this row?
     dey
+    cpy #$ff // boundary check
+    beq dcc_check_rows_finished
     cpy num1
     bcs dcc_column_loop
+dcc_check_rows_finished:    
     // are we done with all rows?
     dec num3
     lda num3
+    cmp #$ff // boundary check    
+    beq dcc_move_next_sprite
     cmp num2
     bcs dcc_row_loop
+dcc_move_next_sprite:
     jmp dcc_next_sprite
 dcc_hit:
     cmp #char_dead 
