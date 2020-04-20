@@ -104,7 +104,7 @@ csa_next_sprite_loop:
     beq csa_jump
     jmp csa_check_fall
 csa_jump:    
-    // have we jumped the configured distance
+   // have we jumped the configured distance
     lda spritejumpdistcov, x
     cmp spritejumpdist, x
     bcs csa_check_fall

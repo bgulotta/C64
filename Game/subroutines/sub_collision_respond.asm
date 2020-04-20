@@ -20,112 +20,136 @@ rcc_next_sprite:
     inx
     cpx #$08
     bne rcc_loop
-    jmp rcc_exit
+    rts
 rcc_loop:
     // is this sprite on?
     lda spriteon, x
-    beq rcc_next_sprite
-    // store which directions we have collided with for comparision below
-    lda spritecollisiondir, x
-    sta num4
-check_collision_up:
-    lda #up
-    bit num4
-    bne respond_collision_up
-check_collision_down:
-    lda #down
-    bit num4
-    bne respond_collision_down
-check_collision_left:
-    lda #left
-    bit num4
-    bne respond_collision_left
-check_collision_right:
-    lda #right
-    bit num4
-    bne respond_collision_right
-    jmp rcc_next_sprite  
-respond_collision_up:
-    // TODO: add top collision logic
-    lda spritecollisionup, x
-    and #dead  
-    bne check_collision_down // TODO: handle deadly platform collision
-    lda spritecollisionup, x
-    and #solid // did we collide with a solid platform type?
-    beq check_collision_down
-    jsr stop_jump
-    jmp check_collision_down
-respond_collision_left:
-    // TODO: add left collision logic
-    lda spritecollisionside, x
-    and #dead // did we collide with a deadly platform?  
-    bne check_collision_right // TODO: handle deadly platform collision
-    lda spritecollisionside, x
-    and #solid // did we collide with a solid platform?
-    beq check_collision_right
-    jsr stop_jump
-    // TODO: handle MSB
-    clc
-    lda spritex, x
-    adc spritemovementspd, x
-    sta spritex, x
-    jmp check_collision_right
-respond_collision_right:
-    lda spritecollisionside, x
-    and #dead // did we collide with a deadly platform?  
-    bne rcc_next_sprite // TODO: handle deadly platform collision
-    lda spritecollisionside, x
-    and #solid // did we collide with a solid platform?
-    beq rcc_next_sprite
-    jsr stop_jump
-    // TODO: handle MSB
-    sec
-    lda spritex, x
-    sbc spritemovementspd, x
-    sta spritex, x
+    beq rcc_next_sprite      
+    jsr check_up_collision
+    jsr check_down_collision
+    jsr check_left_collision
+    jsr check_right_collision
     jmp rcc_next_sprite
-respond_collision_down:
-    lda spritecollisiondown, x
-    and #dead // did we collide with a deadly platform?
-    bne check_collision_left // TODO: handle deadly platform collision
-    jsr move_sprite_to_top_of_char
-    jsr reset_jump
-    jmp check_collision_left
-move_sprite_to_top_of_char:
-    // this method makes sure that the sprite
-    // is always on the top of the character
-    lda spritey, x
-    lda spriterow2, x
-    sta num1
-    lda #$08
-    sta num2
-    jsr multiply
-    clc
-    adc #screen_yoffset
-    sec
-    sbc spriteoffsety2, x
-    sbc spriteoffsety1, x
-    sta spritey, x
+
+check_up_collision:
+    lda spritecollisiondir, x
+    and #up
+    bne handle_up_collision
     rts
-reset_jump:
-    // reset jump meta data
-    lda #$0
-    sta spritejumpdistcov, x
-    lda spriteinitialjs, x
-    sta spritejumpspeed, x 
-    // turn on jumping
-    lda spritemovement, x
-    ora #jump
-    sta spritemovement, x
+    handle_up_collision:
     rts
-stop_jump:
-    // if we are in a jump then stop it
-    lda spritemovement, x
-    and #jump
-    bne sj_exit
-    lda spritejumpdist, x
-    sta spritejumpdistcov, x
-sj_exit:
+
+check_down_collision:
+    lda spritecollisiondir, x
+    and #down
+    bne handle_down_collision
     rts
-rcc_exit:
+    handle_down_collision:
+        hdc_enable_jumping:
+            lda #$00
+            sta spritejumpdistcov, x
+            lda spriteinitialjs, x
+            sta spritejumpspeed, x
+            lda spritemovement, x
+            ora #jump 
+            sta spritemovement, x
+        hdc_move_sprite_top:
+            // this method makes sure that the sprite
+            // is always on the top of the character
+            lda spritey, x
+            lda spriterow2, x
+            sta num1
+            lda #$08
+            sta num2
+            jsr multiply
+            clc
+            adc #screen_yoffset
+            sec
+            sbc spriteoffsety2, x
+            sbc spriteoffsety1, x
+            sta spritey, x
+    rts
+
+check_left_collision:
+    lda spritecollisiondir, x
+    and #left
+    bne handle_left_collision
+    rts
+    handle_left_collision:
+        lda spritecollisionside, x
+        cmp #dead
+        bcs hlc_dead
+        cmp #solid
+        bcs hlc_solid
+        cmp #semi_solid
+        bcs hlc_semi_solid
+        cmp #ladder
+        bcs hlc_ladder
+        cmp #conveyer
+        bcs hlc_conveyer
+        cmp #collapsing
+        bcs hlc_collapsing
+        hlc_dead:
+        rts
+        hlc_solid:
+        jsr hlc_move_sprite_right
+        rts
+        hlc_semi_solid:
+        rts
+        hlc_ladder:
+        rts
+        hlc_conveyer:
+        jsr hlc_move_sprite_right
+        rts
+        hlc_collapsing:
+        jsr hlc_move_sprite_right
+        rts
+        hlc_move_sprite_right:
+            // TODO: handle MSB
+            clc
+            lda spritex, x
+            adc spritemovementspd, x
+            sta spritex, x 
+            rts
+
+check_right_collision:
+    lda spritecollisiondir, x
+    and #right
+    bne handle_right_collision
+    rts
+    handle_right_collision:
+        lda spritecollisionside, x
+        cmp #dead
+        bcs hrc_dead
+        cmp #solid
+        bcs hrc_solid
+        cmp #semi_solid
+        bcs hrc_semi_solid
+        cmp #ladder
+        bcs hrc_ladder
+        cmp #conveyer
+        bcs hrc_conveyer
+        cmp #collapsing
+        bcs hrc_collapsing
+        hrc_dead:
+        rts
+        hrc_solid:
+        jsr hrc_move_sprite_left
+        rts
+        hrc_semi_solid:
+        rts
+        hrc_ladder:
+        rts
+        hrc_conveyer:
+        jsr hrc_move_sprite_left
+        rts
+        hrc_collapsing:
+        jsr hrc_move_sprite_left
+        rts
+        hrc_move_sprite_left:
+            // TODO: handle MSB
+            sec
+            lda spritex, x
+            sbc spritemovementspd, x
+            sta spritex, x
     rts
