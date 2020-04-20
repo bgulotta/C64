@@ -100,7 +100,7 @@ csa_next_sprite_loop:
     beq csa_next_sprite
     // are we in a jump? 
     lda spritemovement, x
-    and #$10
+    and #jump
     beq csa_jump
     jmp csa_check_fall
 csa_jump:    
@@ -125,9 +125,9 @@ csa_jump:
     dec spritejumpspeed, x
     jmp csa_next_sprite
 csa_check_fall:
-    // do we have collision under us?
+    // do we have platform under us?
     lda spritecollisiondir, x
-    and #$02
+    and #down
     bne csa_next_sprite
 csa_fall:
     // continue falling

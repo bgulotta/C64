@@ -72,19 +72,19 @@ lda spritecollisiondir, x
 sta num1
 
 check_collision_up:
-lda #$01
+lda #up
 bit num1
 bne respond_collision_up
 check_collision_down:
-lda #$02
+lda #down
 bit num1
 bne respond_collision_down
 check_collision_left:
-lda #$04
+lda #left
 bit num1
 bne respond_collision_left
 check_collision_right:
-lda #$08
+lda #right
 bit num1
 bne respond_collision_right
 jmp next_sprite
@@ -155,24 +155,24 @@ lda spritemovement, x
 sta num1
 
 check_movement_up:
-lda #$01
+lda #up
 bit num1
 bne respond_movement_up
 check_movement_down:
-lda #$02
+lda #down
 bit num1
 bne respond_movement_down
 check_movement_left:
-lda #$04
+lda #left
 bit num1
 bne respond_movement_left
 check_movement_right:
-lda #$08
+lda #right
 bit num1
 bne respond_movement_right
 jmp check_movement_jump
 check_movement_jump:
-lda #$10
+lda #jump
 bit num1
 bne respond_movement_jump
 jmp next_sprite

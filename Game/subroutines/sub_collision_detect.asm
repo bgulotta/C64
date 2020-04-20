@@ -95,7 +95,7 @@ dcc_row_loop:
 dcc_column_loop:  
     // is this character one we need to act on?
     lda (zero_page1), y
-    cmp #$80
+    cmp #char_collapsing
     bcs dcc_hit
 dcc_check_finished:
     // are we done with this row?
@@ -109,29 +109,34 @@ dcc_check_finished:
     bcs dcc_row_loop
     jmp dcc_next_sprite
 dcc_hit:
-    cmp #$f0 // Death (spikes etc)
+    cmp #char_dead 
     bcs dcc_hit_deadly_platform
-    cmp #$c0 // Solid platforms (cannot pass through)
+    cmp #char_solid 
     bcs dcc_hit_solid_platform
-    cmp #$9a // Semi solid platforms
+    cmp #char_semi_solid 
     bcs dcc_hit_semi_solid_platform
-    cmp #$90 // Conveyers
+    cmp #char_ladder 
+    bcs dcc_hit_ladder_platform
+    cmp #char_conveyer 
     bcs dcc_hit_conveyers_platform
-    jmp dcc_hit_collapsing_platform // Collapsing platforms
+    jmp dcc_hit_collapsing_platform 
 dcc_hit_deadly_platform:
-    lda #$10
+    lda #dead
     jmp dcc_determine_direction
 dcc_hit_solid_platform:
-    lda #$08
+    lda #solid
     jmp dcc_determine_direction
 dcc_hit_semi_solid_platform:
-    lda #$04
+    lda #semi_solid
+    jmp dcc_determine_direction
+dcc_hit_ladder_platform:
+    lda #ladder
     jmp dcc_determine_direction
 dcc_hit_conveyers_platform:
-    lda #$02
+    lda #conveyer
     jmp dcc_determine_direction
 dcc_hit_collapsing_platform:
-    lda #$01
+    lda #collapsing
     jmp dcc_determine_direction
 dcc_determine_direction:
     pha
@@ -148,26 +153,26 @@ dcc_set_direction_side:
     beq dcc_set_direction_right
 dcc_set_direction_left:
     lda spritecollisiondir, x
-    ora #$04
+    ora #left
     sta spritecollisiondir, x
     jmp dcc_hit_done
 dcc_set_direction_right:
     lda spritecollisiondir, x
-    ora #$08
+    ora #right
     sta spritecollisiondir, x
     jmp dcc_hit_done
 dcc_set_direction_top:
     pla
     sta spritecollisionup, x
     lda spritecollisiondir, x
-    ora #$01
+    ora #up
     sta spritecollisiondir, x
     jmp dcc_hit_done
 dcc_set_direction_down:
     pla 
     sta spritecollisiondown, x
     lda spritecollisiondir, x
-    ora #$02
+    ora #down
     sta spritecollisiondir, x
     jmp dcc_hit_done
 dcc_hit_done:

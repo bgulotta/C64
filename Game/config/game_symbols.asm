@@ -19,6 +19,9 @@
 
 .const title_offset     = screen_cols/2 - (title_length/2) + screen_cols * 16
 .const copyright_offset = screen_cols/2 - (copyright_length/2) + screen_cols * 22
+.enum { char_dead=$f0, char_solid=$c0, char_semi_solid=$9a, char_ladder=$95, char_conveyer=$90, char_collapsing=$80 }
+.enum { dead=$20, solid=$10, semi_solid=$08, ladder=$04, conveyer=$02, collapsing=$01 }
+.enum { up=$01, down=$02, left=$04, right=$08, jump=$10 }
 
 *=sprite_meta "Sprite Meta"
 spriteon:           .byte   $01, $00, $00, $00, $00, $00, $00, $00
@@ -60,7 +63,7 @@ spriterow2:         .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritemovement:     .byte   $FC, $00, $00, $00, $00, $00, $00, $00
 spritemovementspd:  .byte   $02, $00, $00, $00, $00, $00, $00, $00
 spritejumpdistcov:  .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritejumpdist:     .byte   $1e, $00, $00, $00, $00, $00, $00, $00
+spritejumpdist:     .byte   $16, $00, $00, $00, $00, $00, $00, $00
 spritejumpspeed:    .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spriteinitialjs:    .byte   $06, $00, $00, $00, $00, $00, $00, $00
 spritefallspeed:     .byte  $04, $01, $00, $00, $00, $00, $00, $00

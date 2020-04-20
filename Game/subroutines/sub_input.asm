@@ -3,30 +3,30 @@
 #importonce
 
 check_input:
-    lda #$10
+    lda #jump
     bit cia_port_a
-    beq jump
+    beq start_jump
 check_direction:
-    lda #$01
+    lda #up
     bit cia_port_a
     beq move_up
-    lda #$02
+    lda #down
     bit cia_port_a
     beq move_down
-    lda #$04
+    lda #left
     bit cia_port_a
     beq move_left
-    lda #$08
+    lda #right
     bit cia_port_a
     beq move_right
 input_exit:
     rts
-jump:
+start_jump:
     bit spritemovement 
     beq check_direction
     // disable jumping ability
     lda spritemovement
-    eor #$10
+    eor #jump
     sta spritemovement
     jmp check_direction
 move_up:
