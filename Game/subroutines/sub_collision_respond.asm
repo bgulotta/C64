@@ -105,26 +105,32 @@ check_down_collision:
         rts
         hdc_solid:
         jsr hdc_enable_jumping
+        jsr hdc_turn_on_left_right_movement
         jsr hdc_turn_off_up_down_movement
         jsr hdc_move_sprite_top
         rts
         hdc_semi_solid:
         jsr hdc_enable_jumping
+        jsr hdc_turn_on_left_right_movement
         jsr hdc_turn_off_up_down_movement
         jsr hdc_move_sprite_top
         rts
         hdc_ladder:
+        jsr hdc_turn_off_left_right_movement
         lda spritemovement, x
+        ora #up
         ora #down
         sta spritemovement, x
         rts
         hdc_conveyer:
         jsr hdc_enable_jumping
+        jsr hdc_turn_on_left_right_movement
         jsr hdc_turn_off_up_down_movement
         jsr hdc_move_sprite_top
         rts
         hdc_collapsing:
         jsr hdc_enable_jumping
+        jsr hdc_turn_on_left_right_movement
         jsr hdc_turn_off_up_down_movement
         jsr hdc_move_sprite_top
         rts
@@ -156,6 +162,19 @@ check_down_collision:
         hdc_turn_off_up_down_movement:
             lda spritemovement, x
             and #$FC
+            sta spritemovement, x
+            rts
+        hdc_turn_off_left_right_movement:
+            lda spritecollisionup, x
+            beq hdc_turn_on_left_right_movement
+            lda spritemovement, x
+            and #$13
+            sta spritemovement, x
+            rts
+        hdc_turn_on_left_right_movement:
+            lda spritemovement, x
+            ora #left
+            ora #right
             sta spritemovement, x
             rts
     hdc_no_collision:
