@@ -53,9 +53,6 @@ move_right:
     adc spritemovementspd
     sta spritex
     beq toggle_msb
-    lda spritemsb
-    bne msb_on
-    rts
     rts
 move_left:
     bit spritemovement
@@ -65,23 +62,9 @@ move_left:
     sbc spritemovementspd
     sta spritex
     bcc toggle_msb
-    lda spritemsb
-    bne msb_on
-    rts
     rts
 toggle_msb:
     lda spritemsb
     eor #$01
     sta spritemsb
     rts
-msb_on:
-    lda spritex
-    cmp #$5B
-    beq reset_x
-    rts
-reset_x:
-    lda #$00
-    sta spritex
-    sta spritemsb
-    rts
-

@@ -225,12 +225,17 @@ check_left_collision:
         hlc_collapsing:
             rts
         hlc_move_sprite_right:
-            // TODO: handle MSB
             clc
             lda spritex, x
             adc spritemovementspd, x
             sta spritex, x 
+            beq hlc_toggle_msb
             rts
+        hlc_toggle_msb:
+            lda spritemsb, x
+            eor #$01
+            sta spritemsb, x
+            rts    
         hlc_disable_move_left:
             lda spritemovement, x
             and #$FB
@@ -297,12 +302,17 @@ check_right_collision:
         hrc_collapsing:
             rts
         hrc_move_sprite_left:
-            // TODO: handle MSB
             sec
             lda spritex, x
             sbc spritemovementspd, x
             sta spritex, x
+            bcc hrc_toggle_msb
             rts
+        hrc_toggle_msb:
+            lda spritemsb, x
+            eor #$01
+            sta spritemsb, x
+            rts    
         hrc_disable_move_right:
             lda spritemovement, x
             and #$F7
