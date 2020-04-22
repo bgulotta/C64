@@ -185,7 +185,7 @@ lda spritex1, x
 clc
 adc spriteoffsetx2, x
 sta spritex2, x
-lda spritemsb, x
+lda spritemsb1, x
 adc #$00
 sta spritemsb2,x
 

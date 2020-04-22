@@ -52,7 +52,10 @@ move_right:
     lda spritex
     adc spritemovementspd
     sta spritex
-    jmp check_msb
+    beq toggle_msb
+    lda spritemsb
+    bne msb_on
+    rts
     rts
 move_left:
     bit spritemovement
@@ -61,12 +64,10 @@ move_left:
     lda spritex
     sbc spritemovementspd
     sta spritex
-    jmp check_msb
-    rts
-check_msb:
-    beq toggle_msb
+    bcc toggle_msb
     lda spritemsb
     bne msb_on
+    rts
     rts
 toggle_msb:
     lda spritemsb

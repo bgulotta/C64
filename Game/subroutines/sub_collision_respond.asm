@@ -52,33 +52,33 @@ check_up_collision:
         cmp #collapsing
         bcs huc_collapsing
         huc_dead:
-        rts
+            rts
         huc_solid:
-        jsr huc_stop_jumping
-        rts
+            jsr huc_stop_jumping
+            jsr huc_turn_off_left_right_movement
+            rts
         huc_semi_solid:
-        rts
+            rts
         huc_ladder:
-        jsr huc_stop_jumping
-        lda spritemovement, x
-        ora #up
-        sta spritemovement, x
-        rts
+            rts
         huc_conveyer:
-        jsr huc_stop_jumping
-        rts
+            rts
         huc_collapsing:
-        jsr huc_stop_jumping
-        rts
+            rts
         huc_stop_jumping:
             // turn off jumping
             lda spritejumpdist, x
             sta spritejumpdistcov, x
             lda spritemovement, x
-            and #$0f  
+            and #$0F  
             sta spritemovement, x
             rts
-    huc_no_collision:     
+        huc_turn_off_left_right_movement:
+            lda spritemovement, x
+            and #$F3
+            sta spritemovement, x
+            rts
+    huc_no_collision:
     rts
 
 check_down_collision:
@@ -102,38 +102,36 @@ check_down_collision:
         cmp #collapsing
         bcs hdc_collapsing
         hdc_dead:
-        rts
+            rts
         hdc_solid:
-        jsr hdc_enable_jumping
-        jsr hdc_turn_on_left_right_movement
-        jsr hdc_turn_off_up_down_movement
-        jsr hdc_move_sprite_top
-        rts
+            jsr hdc_enable_jumping
+            jsr hdc_turn_on_left_right_movement
+            jsr hdc_turn_off_up_down_movement
+            jsr hdc_move_sprite_top
+            rts
         hdc_semi_solid:
-        jsr hdc_enable_jumping
-        jsr hdc_turn_on_left_right_movement
-        jsr hdc_turn_off_up_down_movement
-        jsr hdc_move_sprite_top
-        rts
+            jsr hdc_enable_jumping
+            jsr hdc_turn_on_left_right_movement
+            jsr hdc_turn_off_up_down_movement
+            jsr hdc_move_sprite_top
+            rts
         hdc_ladder:
-        jsr hdc_turn_off_left_right_movement
-        lda spritemovement, x
-        ora #up
-        ora #down
-        sta spritemovement, x
-        rts
+            lda spritecollisiondir, x
+            cmp #down
+            beq hdc_turn_on_up_down_movement
+            // if we have no other collision types but sitting on top 
+            // of a ladder then make sure that we enable left and right movement
+            cmp #$03
+            bcc hdc_turn_on_left_right_movement
+            rts
         hdc_conveyer:
-        jsr hdc_enable_jumping
-        jsr hdc_turn_on_left_right_movement
-        jsr hdc_turn_off_up_down_movement
-        jsr hdc_move_sprite_top
-        rts
+            jsr hdc_turn_off_up_down_movement
+            jsr hdc_move_sprite_top
+            rts
         hdc_collapsing:
-        jsr hdc_enable_jumping
-        jsr hdc_turn_on_left_right_movement
-        jsr hdc_turn_off_up_down_movement
-        jsr hdc_move_sprite_top
-        rts
+            jsr hdc_turn_off_up_down_movement
+            jsr hdc_move_sprite_top
+            rts
         hdc_enable_jumping:
             lda #$00
             sta spritejumpdistcov, x
@@ -141,6 +139,14 @@ check_down_collision:
             sta spritejumpspeed, x
             lda spritemovement, x
             ora #jump 
+            sta spritemovement, x
+            rts
+        hdc_stop_jumping:
+            // turn off jumping
+            lda spritejumpdist, x
+            sta spritejumpdistcov, x
+            lda spritemovement, x
+            and #$0F  
             sta spritemovement, x
             rts
         hdc_move_sprite_top:
@@ -159,22 +165,21 @@ check_down_collision:
             sbc spriteoffsety1, x
             sta spritey, x
             rts
-        hdc_turn_off_up_down_movement:
-            lda spritemovement, x
-            and #$FC
-            sta spritemovement, x
-            rts
-        hdc_turn_off_left_right_movement:
-            lda spritecollisionup, x
-            beq hdc_turn_on_left_right_movement
-            lda spritemovement, x
-            and #$13
-            sta spritemovement, x
-            rts
         hdc_turn_on_left_right_movement:
             lda spritemovement, x
             ora #left
             ora #right
+            sta spritemovement, x
+            rts
+        hdc_turn_on_up_down_movement:
+            lda spritemovement, x
+            ora #up
+            ora #down
+            sta spritemovement, x
+            rts
+        hdc_turn_off_up_down_movement:
+            lda spritemovement, x
+            and #$FC
             sta spritemovement, x
             rts
     hdc_no_collision:
@@ -185,9 +190,10 @@ check_left_collision:
     lda spritecollisiondir, x
     and #left
     bne handle_left_collision
+    jsr hlc_no_collision
     rts
     handle_left_collision:
-        lda spritecollisionside, x
+        lda spritecollisionleft, x
         cmp #dead
         bcs hlc_dead
         cmp #solid
@@ -201,20 +207,23 @@ check_left_collision:
         cmp #collapsing
         bcs hlc_collapsing
         hlc_dead:
-        rts
+            rts
         hlc_solid:
-        jsr hlc_move_sprite_right
-        rts
+            jsr hlc_move_sprite_right
+            jsr hlc_disable_move_left
+            rts
         hlc_semi_solid:
-        rts
+            rts
         hlc_ladder:
-        rts
+            lda spritecollisionright, x
+            cmp #ladder
+            beq hlc_turn_on_up_down_movement
+            beq hlc_stop_jumping
+            rts
         hlc_conveyer:
-        jsr hlc_move_sprite_right
-        rts
+            rts
         hlc_collapsing:
-        jsr hlc_move_sprite_right
-        rts
+            rts
         hlc_move_sprite_right:
             // TODO: handle MSB
             clc
@@ -222,14 +231,41 @@ check_left_collision:
             adc spritemovementspd, x
             sta spritex, x 
             rts
+        hlc_disable_move_left:
+            lda spritemovement, x
+            and #$FB
+            sta spritemovement, x
+            rts
+        hlc_turn_on_up_down_movement:
+            lda spritemovement, x
+            ora #up
+            ora #down
+            sta spritemovement, x
+            rts
+        hlc_turn_off_up_down_movement:
+            lda spritemovement, x
+            and #$FC
+            sta spritemovement, x
+            rts
+        hlc_stop_jumping:
+            // turn off jumping
+            lda spritejumpdist, x
+            sta spritejumpdistcov, x
+            lda spritemovement, x
+            and #$0F  
+            sta spritemovement, x
+            rts
+    hlc_no_collision:
+        rts
 
 check_right_collision:
     lda spritecollisiondir, x
     and #right
     bne handle_right_collision
+    jsr hrc_no_collision
     rts
     handle_right_collision:
-        lda spritecollisionside, x
+        lda spritecollisionright, x
         cmp #dead
         bcs hrc_dead
         cmp #solid
@@ -243,20 +279,23 @@ check_right_collision:
         cmp #collapsing
         bcs hrc_collapsing
         hrc_dead:
-        rts
+            rts
         hrc_solid:
-        jsr hrc_move_sprite_left
-        rts
+            jsr hrc_move_sprite_left
+            jsr hrc_disable_move_right
+            rts
         hrc_semi_solid:
-        rts
+            rts
         hrc_ladder:
-        rts
+            lda spritecollisionleft, x
+            cmp #ladder
+            beq hrc_turn_on_up_down_movement
+            beq hrc_stop_jumping
+            rts
         hrc_conveyer:
-        jsr hrc_move_sprite_left
-        rts
+            rts
         hrc_collapsing:
-        jsr hrc_move_sprite_left
-        rts
+            rts
         hrc_move_sprite_left:
             // TODO: handle MSB
             sec
@@ -264,3 +303,31 @@ check_right_collision:
             sbc spritemovementspd, x
             sta spritex, x
             rts
+        hrc_disable_move_right:
+            lda spritemovement, x
+            and #$F7
+            sta spritemovement, x
+            rts
+        hrc_turn_on_up_down_movement:
+            lda spritemovement, x
+            ora #up
+            ora #down
+            sta spritemovement, x
+            rts
+        hrc_turn_off_up_down_movement:
+            lda spritemovement, x
+            and #$FC
+            sta spritemovement, x
+            rts
+        hrc_stop_jumping:
+            // turn off jumping
+            lda spritejumpdist, x
+            sta spritejumpdistcov, x
+            lda spritemovement, x
+            and #$0F  
+            sta spritemovement, x
+            rts
+    hrc_no_collision:
+        rts
+
+

@@ -4,7 +4,7 @@
 .const irq_beg_sav      = $03a0
 .const irq_end_sav      = $03a1
 .const sprite_data      = $0880
-.const sprite_meta      = $2e00
+.const sprite_meta      = $2f00
 .const subroutines      = $2200        
 .const zero_page1       = $fc
 .const zero_page2       = $fe
@@ -40,9 +40,9 @@ spritecolormulti1:  .byte   $0c
 spritecolormulti2:  .byte   $0a
 
 // sprite locations and other attributes
-spritex:            .byte   $30, $80, $00, $00, $00, $00, $00, $00
+spritex:            .byte   $00, $80, $00, $00, $00, $00, $00, $00
 spritey:            .byte   $78, $48, $00, $00, $00, $00, $00, $00
-spritemsb:          .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spritemsb:          .byte   $01, $00, $00, $00, $00, $00, $00, $00
 
 // sprite hit boxes
 spritex1:	        .byte   $00, $00, $00, $00, $00, $00, $00, $00
@@ -60,7 +60,7 @@ spriterow1:         .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spriterow2:         .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite movement attributes
-spritemovement:     .byte   $FC, $00, $00, $00, $00, $00, $00, $00
+spritemovement:     .byte   $FF, $00, $00, $00, $00, $00, $00, $00
 spritemovementspd:  .byte   $01, $00, $00, $00, $00, $00, $00, $00
 spritejumpdistcov:  .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritejumpdist:     .byte   $1e, $00, $00, $00, $00, $00, $00, $00
@@ -73,7 +73,8 @@ spritecollisionspr:  .byte  $00, $00, $00, $00, $00, $00, $00, $00
 spritecollisiondir:  .byte  $00, $00, $00, $00, $00, $00, $00, $00 // bit 0 above, bit 1 below, bit 2 left, bit 3 right collision
 spritecollisionup:   .byte  $00, $00, $00, $00, $00, $00, $00, $00
 spritecollisiondown: .byte  $00, $00, $00, $00, $00, $00, $00, $00
-spritecollisionside: .byte  $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisionleft: .byte  $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisionright: .byte $00, $00, $00, $00, $00, $00, $00, $00
 
 // looping / math 
 arithmetic_value:   .byte   $00, $00

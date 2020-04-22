@@ -24,12 +24,12 @@ draw_map_done:
 rts
 
 debug_output:
-DrawCollisionInfo()
-draw_collision_info_done:
-DrawMovementInfo()
-draw_movement_info_done:
 //DrawCharBoundaries()
 draw_char_bounadaries_done:
+DrawMovementInfo()
+draw_movement_info_done:
+DrawCollisionInfo()
+draw_collision_info_done:
 rts
 
 /*
@@ -50,13 +50,38 @@ sta (zero_page1), y
 iny 
 lda #$12
 sta (zero_page1), y
+
+lda #$15
+ldy #7
+sta (zero_page1), y
+iny 
+lda #$04
+sta (zero_page1), y
+iny 
+lda #$0C
+sta (zero_page1), y
+iny 
+lda #$12
+sta (zero_page1), y
+
 next_sprite:
 inx
 cpx #$08
-beq draw_collision_info_done
+bne process_sprite
+rts
+process_sprite:
 jsr zp_screen_pointer_next_row
 lda #$30
 ldy #$02
+sta (zero_page1), y
+iny
+sta (zero_page1), y
+iny
+sta (zero_page1), y
+iny
+sta (zero_page1), y
+
+ldy #7
 sta (zero_page1), y
 iny
 sta (zero_page1), y
@@ -92,20 +117,32 @@ respond_collision_up:
 lda #$31
 ldy #$02
 sta (zero_page1), y
+lda spritecollisionup, x
+ldy #$07
+sta (zero_page1), y
 jmp check_collision_down
 respond_collision_down:
 lda #$31
 ldy #$03
+sta (zero_page1), y
+lda spritecollisiondown, x
+ldy #$08
 sta (zero_page1), y
 jmp check_collision_left
 respond_collision_left:
 lda #$31
 ldy #$04
 sta (zero_page1), y
+ldy #$09
+lda spritecollisionleft, x
+sta (zero_page1), y
 jmp check_collision_right
 respond_collision_right:
 lda #$31
 ldy #$05
+sta (zero_page1), y
+ldy #$0a
+lda spritecollisionright, x
 sta (zero_page1), y
 jmp next_sprite
 }

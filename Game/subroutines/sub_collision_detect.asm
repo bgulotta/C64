@@ -64,7 +64,8 @@ dcc_loop:
     sta spritecollisiondir, x
     sta spritecollisionup, x
     sta spritecollisiondown, x
-    sta spritecollisionside, x 
+    sta spritecollisionleft, x
+    sta spritecollisionright, x 
     // is this sprite on?
     lda spriteon, x
     beq dcc_next_sprite
@@ -148,26 +149,28 @@ dcc_determine_direction:
     pha
     lda num3
     cmp spriterow2, x
-    beq dcc_set_direction_top
+    beq dcc_set_direction_up
     cmp spriterow1, x
     beq dcc_set_direction_down
 dcc_set_direction_side:
-    pla
-    sta spritecollisionside, x
     tya
     cmp spritecol2, x
     beq dcc_set_direction_right
 dcc_set_direction_left:
+    pla
+    sta spritecollisionleft, x
     lda spritecollisiondir, x
     ora #left
     sta spritecollisiondir, x
     jmp dcc_hit_done
 dcc_set_direction_right:
+    pla
+    sta spritecollisionright, x
     lda spritecollisiondir, x
     ora #right
     sta spritecollisiondir, x
     jmp dcc_hit_done
-dcc_set_direction_top:
+dcc_set_direction_up:
     pla
     sta spritecollisionup, x
     lda spritecollisiondir, x
