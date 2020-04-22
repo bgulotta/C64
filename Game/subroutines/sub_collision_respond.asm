@@ -29,7 +29,30 @@ rcc_loop:
     jsr check_up_collision
     jsr check_left_collision
     jsr check_right_collision
+    jsr check_boundary_collision
     jmp rcc_next_sprite
+
+check_boundary_collision:
+
+    cbc_left:
+        lda spritecol1, x
+        bne cbc_right 
+
+        lda spritemovement, x
+        and #$FB
+        sta spritemovement, x
+
+    cbc_right:
+        lda spritecol2, x
+        cmp #screen_cols
+        bcc cbc_exit
+
+        lda spritemovement, x
+        and #$F7
+        sta spritemovement, x
+
+    cbc_exit:
+    rts
 
 check_up_collision:
     lda spritecollisiondir, x
@@ -55,7 +78,6 @@ check_up_collision:
             rts
         huc_solid:
             jsr huc_stop_jumping
-            jsr huc_turn_off_left_right_movement
             rts
         huc_semi_solid:
             rts
@@ -133,14 +155,21 @@ check_down_collision:
             jsr hdc_move_sprite_top
             rts
         hdc_enable_jumping:
-            lda #$00
-            sta spritejumpdistcov, x
-            lda spriteinitialjs, x
-            sta spritejumpspeed, x
-            lda spritemovement, x
-            ora #jump 
-            sta spritemovement, x
-            rts
+            cpx #$00
+            bne hdc_enable_jumping_do
+            lda #jump
+            bit cia_port_a
+            beq hdc_enable_jumping_done            
+            hdc_enable_jumping_do:
+                lda #$00
+                sta spritejumpdistcov, x
+                lda spriteinitialjs, x
+                sta spritejumpspeed, x
+                lda spritemovement, x
+                ora #jump 
+                sta spritemovement, x
+            hdc_enable_jumping_done:
+                rts
         hdc_stop_jumping:
             // turn off jumping
             lda spritejumpdist, x
