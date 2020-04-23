@@ -9,13 +9,11 @@
 .const zero_page1       = $fc
 .const zero_page2       = $fe
 .const screen_cols      = 40
+.const screen_cols_oob  = 41
 .const screen_rows      = 25
+.const screen_rows_oob  = 26
 .const screen_xoffset   = $18
 .const screen_yoffset   = $32
-.const sprite_ymin      = $32
-.const sprite_ymax      = $E5
-.const sprite_xmin      = $32
-.const sprite_xmax      = $E5
 
 .const title_offset     = screen_cols/2 - (title_length/2) + screen_cols * 16
 .const copyright_offset = screen_cols/2 - (copyright_length/2) + screen_cols * 22
@@ -40,9 +38,9 @@ spritecolormulti1:  .byte   $0c
 spritecolormulti2:  .byte   $0a
 
 // sprite locations and other attributes
-spritex:            .byte   $00, $80, $00, $00, $00, $00, $00, $00
-spritey:            .byte   $78, $48, $00, $00, $00, $00, $00, $00
-spritemsb:          .byte   $01, $00, $00, $00, $00, $00, $00, $00
+spritex:            .byte   $7D, $80, $00, $00, $00, $00, $00, $00
+spritey:            .byte   $2F, $48, $00, $00, $00, $00, $00, $00
+spritemsb:          .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite hit boxes
 spritex1:	        .byte   $00, $00, $00, $00, $00, $00, $00, $00

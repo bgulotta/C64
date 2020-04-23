@@ -178,7 +178,11 @@ sta arithmetic_value
 
 jsr divide_by_8
 lda arithmetic_value + 1
-sta spritecol1, x
+cmp #screen_cols_oob
+bcc ush_store_col1
+lda #$00
+ush_store_col1:
+    sta spritecol1, x
 
 // set x2
 lda spritex1, x
@@ -200,7 +204,11 @@ sta arithmetic_value
 
 jsr divide_by_8
 lda arithmetic_value + 1
-sta spritecol2, x
+cmp #screen_cols_oob
+bcc ush_store_col2
+lda #$00
+ush_store_col2:
+    sta spritecol2, x
 
 // set y1 & y2
 lda spritey, x
@@ -220,7 +228,11 @@ sta arithmetic_value
 
 jsr divide_by_8
 lda arithmetic_value + 1
-sta spriterow1, x
+cmp #screen_rows_oob
+bcc ush_store_row1
+lda #$00
+ush_store_row1:
+    sta spriterow1, x
 
 // sprite row2
 sec
@@ -232,7 +244,11 @@ sta arithmetic_value
 
 jsr divide_by_8
 lda arithmetic_value + 1
-sta spriterow2, x
+cmp #screen_rows_oob
+bcc ush_store_row2
+lda #$00
+ush_store_row2:
+    sta spriterow2, x
 
 jmp ush_loop
 rts

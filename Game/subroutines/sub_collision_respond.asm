@@ -29,30 +29,7 @@ rcc_loop:
     jsr check_up_collision
     jsr check_left_collision
     jsr check_right_collision
-    jsr check_boundary_collision
     jmp rcc_next_sprite
-
-check_boundary_collision:
-
-    cbc_left:
-        lda spritecol1, x
-        bne cbc_right 
-
-        lda spritemovement, x
-        and #$FB
-        sta spritemovement, x
-
-    cbc_right:
-        lda spritecol2, x
-        cmp #screen_cols
-        bcc cbc_exit
-
-        lda spritemovement, x
-        and #$F7
-        sta spritemovement, x
-
-    cbc_exit:
-    rts
 
 check_up_collision:
     lda spritecollisiondir, x

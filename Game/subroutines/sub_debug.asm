@@ -24,6 +24,8 @@ draw_map_done:
 rts
 
 debug_output:
+DrawRowColInfo()
+draw_row_col_info_done:
 //DrawCharBoundaries()
 draw_char_bounadaries_done:
 DrawMovementInfo()
@@ -241,6 +243,51 @@ jmp next_sprite
 }
 
 /*
+This function will draw all the collision flags for debugging purposes
+*/
+.macro DrawRowColInfo(){
+ldx #$ff
+jsr zp_screen_pointer
+ldy #25
+lda #$12
+sta (zero_page1), y
+iny 
+lda #$03
+sta (zero_page1), y
+iny 
+lda #$12
+sta (zero_page1), y
+iny 
+lda #$03
+sta (zero_page1), y
+
+next_sprite:
+inx
+cpx #$08
+bne process_sprite
+jmp draw_row_col_info_done
+
+process_sprite:
+lda spriteon, x
+beq next_sprite
+
+jsr zp_screen_pointer_next_row
+ldy #25
+lda spriterow1, x
+sta (zero_page1), y
+iny 
+lda spritecol1, x
+sta (zero_page1), y
+iny 
+lda spriterow2, x
+sta (zero_page1), y
+iny 
+lda spritecol2, x
+sta (zero_page1), y
+
+jmp next_sprite
+}
+/*
     This method will fill in the characters the sprite is in
 */
 .macro DrawCharBoundaries () {
@@ -264,6 +311,7 @@ dcc_loop:
     jsr zp_screen_pointer
     // keep moving down a row until we get to the start of the sprite
     ldy spriterow1, x
+    beq dcc_check_sprite // sprite at row 0 check?
 dcc_next_row:
     cpy #$1
     beq dcc_check_sprite

@@ -73,6 +73,7 @@ dcc_loop:
     jsr zp_screen_pointer
     // keep moving down a row until we get to the start of the sprite
     ldy spriterow1, x
+    beq dcc_check_sprite // sprite at row 0 check?
 dcc_next_row:
     cpy #$1
     beq dcc_check_sprite
