@@ -52,9 +52,9 @@ spritecolormulti1:  .byte   $01
 spritecolormulti2:  .byte   $00
 
 // sprite locations and other attributes
-spritex:            .byte   $40, $80, $00, $00, $00, $00, $00, $00
+spritex:            .byte   $40, $00, $00, $00, $00, $00, $00, $00
 spritey:            .byte   $38, $48, $00, $00, $00, $00, $00, $00
-spritemsb:          .byte   $00, $00, $00, $00, $00, $00, $00, $00
+spritemsb:          .byte   $00, $01, $00, $00, $00, $00, $00, $00
 
 // sprite hit boxes
 spritex1:	        .byte   $00, $00, $00, $00, $00, $00, $00, $00
@@ -90,6 +90,8 @@ spritecollisionleft: .byte  $00, $00, $00, $00, $00, $00, $00, $00
 spritecollisionright: .byte $00, $00, $00, $00, $00, $00, $00, $00
 
 // looping / math 
+bits:                .byte $01, $02, $04, $08, $10, $20, $40, $80
+
 arithmetic_value:   .byte   $00, $00
 num1:               .byte   $00
 num2:               .byte   $00

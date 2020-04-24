@@ -66,7 +66,7 @@ irq:
     jsr respond_char_collision
     jsr update_sprite_frame
     jsr move_sprites
-    jsr debug_output
+    //jsr debug_output
 
     // acknowledge the raster interrupt
     dec vic_intrpt_sts  

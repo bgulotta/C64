@@ -58,7 +58,7 @@ setup_sprites_loop:
     based on their x,y positions
 */
 move_sprites:
-
+        
     ldx #$07
     ldy #$0e
     jsr zp_sprite_pointer
@@ -80,8 +80,20 @@ move_sprites_loop:
     // set sprite xpos msb
     lda spritemsb, x
     cmp #$01
-    rol vic_spr_xpos_msb
-
+    beq turn_on_bit
+    turn_off_bit:
+        lda bits, x
+        eor #$FF 
+        sta num1
+        lda vic_spr_xpos_msb         
+        and num1
+        sta vic_spr_xpos_msb
+        jmp ms_pointer
+    turn_on_bit:
+        lda vic_spr_xpos_msb 
+        ora bits, x
+        sta vic_spr_xpos_msb
+    ms_pointer:
     // update sprite pointer with any changes
     tya
     pha
@@ -91,7 +103,7 @@ move_sprites_loop:
     sta (zero_page1), y
     pla 
     tay
-    
+
     ms_next_sprite:
 
     dey
