@@ -3,8 +3,6 @@
 #importonce
 
 check_input:
-    lda #$00
-    sta spritedirection
     lda #jump
     bit cia_port_a
     beq start_jump
@@ -34,8 +32,6 @@ start_jump:
 move_up:
     bit spritemovement
     beq input_exit
-    lda #up
-    sta spritedirection    
     sec 
     lda spritey
     sbc spritemovementspd
@@ -44,8 +40,6 @@ move_up:
 move_down:
     bit spritemovement
     beq input_exit
-    lda #down
-    sta spritedirection    
     clc 
     lda spritey
     adc spritemovementspd
