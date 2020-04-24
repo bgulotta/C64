@@ -73,13 +73,13 @@ dcc_loop:
     jsr zp_screen_pointer
     // keep moving down a row until we get to the start of the sprite
     ldy spriterow1, x
-    beq dcc_check_sprite // sprite at row 0 check?
-dcc_next_row:
-    cpy #$1
+dcc_screen_next_row:
+    cpy #$00
     beq dcc_check_sprite
+    dey  
+    // go to the next row
     jsr zp_screen_pointer_next_row
-    dey
-    jmp dcc_next_row
+    jmp dcc_screen_next_row
 dcc_check_sprite:
     // y = num1 current row is finished
     lda spritecol1, x
@@ -90,8 +90,6 @@ dcc_check_sprite:
     lda spriterow1, x
     sta num2
 dcc_row_loop:
-    // go to the next row
-    jsr zp_screen_pointer_next_row
     // start at the last column
     ldy spritecol2, x
 dcc_column_loop:  
@@ -113,9 +111,12 @@ dcc_check_rows_finished:
     cmp #$ff // boundary check    
     beq dcc_move_next_sprite
     cmp num2
-    bcs dcc_row_loop
+    bcs dcc_sprite_next_row
 dcc_move_next_sprite:
     jmp dcc_next_sprite
+dcc_sprite_next_row:
+  jsr zp_screen_pointer_next_row
+  jmp dcc_row_loop  
 dcc_hit:
     cmp #char_dead 
     bcs dcc_hit_deadly_platform

@@ -4,7 +4,7 @@
 .const irq_beg_sav      = $03a0
 .const irq_end_sav      = $03a1
 .const sprite_data      = $0880
-.const sprite_meta      = $2f00
+.const sprite_meta      = $3000
 .const subroutines      = $2200        
 .const zero_page1       = $fc
 .const zero_page2       = $fe
@@ -14,6 +14,7 @@
 .const screen_rows_oob  = 26
 .const screen_xoffset   = $18
 .const screen_yoffset   = $32
+.const sprite_framecnt  = $0a
 
 .const title_offset     = screen_cols/2 - (title_length/2) + screen_cols * 16
 .const copyright_offset = screen_cols/2 - (copyright_length/2) + screen_cols * 22
@@ -24,22 +25,35 @@
 *=sprite_meta "Sprite Meta"
 spriteon:           .byte   $01, $00, $00, $00, $00, $00, $00, $00
 spritepointer:      .byte   $22, $23, $00, $00, $00, $00, $00, $00
+spritehorzexpand:   .byte   $01, $00, $00, $00, $00, $00, $00, $00
+spritevertexpand:   .byte   $01, $00, $00, $00, $00, $00, $00, $00
+
+// sprite frame meta data
+framecounter:       .byte   $0a
+spriteuframebegin:  .byte   $22, $00, $00, $00, $00, $00, $00, $00
+spriteuframeend:    .byte   $02, $00, $00, $00, $00, $00, $00, $00
+spritedframebegin:  .byte   $22, $00, $00, $00, $00, $00, $00, $00
+spritedframeend:    .byte   $02, $00, $00, $00, $00, $00, $00, $00
+spritelframebegin:  .byte   $22, $00, $00, $00, $00, $00, $00, $00
+spritelframeend:    .byte   $23, $00, $00, $00, $00, $00, $00, $00
+spriterframebegin:  .byte   $24, $00, $00, $00, $00, $00, $00, $00
+spriterframeend:    .byte   $25, $00, $00, $00, $00, $00, $00, $00
 
 // sprite frame offsets
 spriteoffsetx1:     .byte   $04, $02, $00, $00, $00, $00, $00, $00 
-spriteoffsetx2:     .byte   $0e, $0e, $00, $00, $00, $00, $00, $00
-spriteoffsety1:     .byte   $04, $05, $00, $00, $00, $00, $00, $00
-spriteoffsety2:     .byte   $0f, $0f, $00, $00, $00, $00, $00, $00
+spriteoffsetx2:     .byte   $0c, $0e, $00, $00, $00, $00, $00, $00
+spriteoffsety1:     .byte   $03, $05, $00, $00, $00, $00, $00, $00
+spriteoffsety2:     .byte   $10, $0f, $00, $00, $00, $00, $00, $00
                       
 // sprite color data
 spritecolormenable: .byte   $01, $01, $00, $00, $00, $00, $00, $00
-spritecolor:        .byte   $08, $0e, $00, $00, $00, $00, $00, $00
-spritecolormulti1:  .byte   $0c
-spritecolormulti2:  .byte   $0a
+spritecolor:        .byte   $07, $0e, $00, $00, $00, $00, $00, $00
+spritecolormulti1:  .byte   $01
+spritecolormulti2:  .byte   $00
 
 // sprite locations and other attributes
 spritex:            .byte   $7D, $80, $00, $00, $00, $00, $00, $00
-spritey:            .byte   $2F, $48, $00, $00, $00, $00, $00, $00
+spritey:            .byte   $28, $48, $00, $00, $00, $00, $00, $00
 spritemsb:          .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite hit boxes
@@ -58,13 +72,14 @@ spriterow1:         .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spriterow2:         .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite movement attributes
+spritedirection:    .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritemovement:     .byte   $FF, $00, $00, $00, $00, $00, $00, $00
 spritemovementspd:  .byte   $01, $00, $00, $00, $00, $00, $00, $00
 spritejumpdistcov:  .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritejumpdist:     .byte   $1e, $00, $00, $00, $00, $00, $00, $00
 spritejumpspeed:    .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spriteinitialjs:    .byte   $07, $00, $00, $00, $00, $00, $00, $00
-spritefallspeed:    .byte   $04, $01, $00, $00, $00, $00, $00, $00
+spritefallspeed:    .byte   $01, $01, $00, $00, $00, $00, $00, $00
 
 // sprite collision attributes
 spritecollisionspr:  .byte  $00, $00, $00, $00, $00, $00, $00, $00

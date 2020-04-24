@@ -158,7 +158,6 @@ check_down_collision:
         hdc_move_sprite_top:
             // this method makes sure that the sprite
             // is always on the top of the character
-            lda spritey, x
             lda spriterow2, x
             sta num1
             lda #$08

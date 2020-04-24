@@ -5,6 +5,7 @@
 #import "../subroutines/sub_collision_detect.asm"
 #import "../subroutines/sub_collision_respond.asm"
 #import "../subroutines/sub_debug.asm"
+#import "../subroutines/sub_animation.asm"
 
 setup_irq:
     sei
@@ -62,6 +63,7 @@ irq:
     jsr detect_char_collision
     jsr respond_sprite_collision
     jsr respond_char_collision
+    jsr update_sprite_frame
     jsr move_sprites
     jsr debug_output
 

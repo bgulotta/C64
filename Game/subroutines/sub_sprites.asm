@@ -51,6 +51,7 @@ move_sprites:
 
     ldx #$07
     ldy #$0e
+    jsr zp_sprite_pointer
 
 move_sprites_loop:
 
@@ -71,7 +72,9 @@ move_sprites_loop:
     cmp #$01
     rol vic_spr_xpos_msb
 
-    // todo: update sprite frame pointer for animation
+    // update sprite pointer with any changes
+    lda spritepointer, x
+    sta (zero_page1), y
 
     ms_next_sprite:
 

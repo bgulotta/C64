@@ -11,7 +11,7 @@
 init_screen:
     jsr zp_screen_pointer
     ldx #0 
-    lda #0  
+    lda #$07  
     sta vic_bg_color 
     sta vic_bdr_color
 next_row:
