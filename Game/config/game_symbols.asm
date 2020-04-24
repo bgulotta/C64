@@ -76,7 +76,7 @@ spritedirection:    .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritemovement:     .byte   $FF, $00, $00, $00, $00, $00, $00, $00
 spritemovementspd:  .byte   $01, $00, $00, $00, $00, $00, $00, $00
 spritejumpdistcov:  .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spritejumpdist:     .byte   $20, $00, $00, $00, $00, $00, $00, $00
+spritejumpdist:     .byte   $1c, $00, $00, $00, $00, $00, $00, $00
 spritejumpspeed:    .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spriteinitialjs:    .byte   $04, $00, $00, $00, $00, $00, $00, $00
 spritefallspeed:    .byte   $01, $01, $00, $00, $00, $00, $00, $00
