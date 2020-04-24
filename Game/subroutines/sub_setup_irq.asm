@@ -56,7 +56,8 @@ reset_irq:
 // custom interrupt routine
 irq:
     //jsr color_wash
-    jsr check_input
+    jsr check_player1_input
+    jsr check_player2_input
     jsr check_sprite_airborne
     jsr update_sprite_hitbox
     jsr detect_sprite_collision

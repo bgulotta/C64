@@ -132,11 +132,20 @@ check_down_collision:
             jsr hdc_move_sprite_top
             rts
         hdc_enable_jumping:
+            cpx #$02
+            bcs hdc_enable_jumping_do
             cpx #$00
-            bne hdc_enable_jumping_do
-            lda #jump
-            bit cia_port_a
-            beq hdc_enable_jumping_done            
+            beq hdc_ej_player1
+            jmp hdc_ej_player2
+            hdc_ej_player1:
+                lda #jump
+                bit cia_port_a
+                jmp hdc_ej_check
+            hdc_ej_player2:
+                lda #jump
+                bit cia_port_b
+            hdc_ej_check:
+                beq hdc_enable_jumping_done            
             hdc_enable_jumping_do:
                 lda #$00
                 sta spritejumpdistcov, x

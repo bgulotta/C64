@@ -20,7 +20,6 @@ sprite_busby_left:
     .byte $00,$00,$0c,$00,$00,$00,$00,$87
 
 sprite_busby_right:
-
     .byte $0c,$30,$00,$03,$0c,$00,$03,$fc
     .byte $00,$0e,$ab,$00,$0e,$ef,$00,$0e
     .byte $bb,$00,$03,$ab,$00,$00,$fc,$00

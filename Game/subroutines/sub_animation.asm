@@ -18,15 +18,14 @@ update_sprite_frame:
     usf_loop:
         // is this sprite on?
         lda spriteon, x
-        beq usf_next_sprite
-
+        beq usf_next_sprite 
         lda spritedirection, x
         cmp #left
         beq usf_left
         cmp #right
         beq usf_right
-        cmp #up
-        /*beq usf_up
+        /*cmp #up
+        beq usf_up
         cmp #down
         beq usf_down*/
         jmp usf_next_sprite

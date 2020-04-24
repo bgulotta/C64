@@ -34,6 +34,16 @@ setup_sprites_loop:
     lda spritecolormulti2
     sta vic_spr_colorm2
     
+       // set sprite vert double
+    lda spritevertexpand, y
+    cmp #$01
+    rol vic_spr_vert_exp
+
+    // set sprite horz double
+    lda spritehorzexpand, y
+    cmp #$01
+    rol vic_spr_horz_exp
+
     // turn on sprites
     lda spriteon, y
     cmp #$01
@@ -72,20 +82,16 @@ move_sprites_loop:
     cmp #$01
     rol vic_spr_xpos_msb
 
-    // set sprite vert double
-    lda spritevertexpand, x
-    cmp #$01
-    rol vic_spr_vert_exp
-
-    // set sprite horz double
-    lda spritehorzexpand, x
-    cmp #$01
-    rol vic_spr_horz_exp
-
     // update sprite pointer with any changes
+    tya
+    pha
+    txa
+    tay
     lda spritepointer, x
     sta (zero_page1), y
-
+    pla 
+    tay
+    
     ms_next_sprite:
 
     dey
@@ -144,14 +150,21 @@ csa_check_fall:
     bne csa_next_sprite
 csa_fall:
     csa_enable_jumping:
-
-    // turn jumping back on as we are falling
-    cpx #$00
-    bne csa_enable_jumping_do
-    lda #jump
-    bit cia_port_a
-    beq csa_continue_fall            
-    csa_enable_jumping_do:
+        cpx #$02
+        bcs csa_enable_jumping_do
+        cpx #$00
+        beq csa_ej_player1
+        jmp csa_ej_player2
+        csa_ej_player1:
+            lda #jump
+            bit cia_port_a
+            jmp csa_ej_check
+        csa_ej_player2:
+            lda #jump
+            bit cia_port_b
+        csa_ej_check:
+        beq csa_continue_fall
+        csa_enable_jumping_do:
         lda #$00
         sta spritejumpdistcov, x
         lda spriteinitialjs, x
