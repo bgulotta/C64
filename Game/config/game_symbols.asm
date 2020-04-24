@@ -23,13 +23,13 @@
 .enum { up=$01, down=$02, left=$04, right=$08, jump=$10 }
 
 *=sprite_meta "Sprite Meta"
-spriteon:           .byte   $01, $00, $00, $00, $00, $00, $00, $00
+spriteon:           .byte   $01, $01, $00, $00, $00, $00, $00, $00
 spritepointer:      .byte   $22, $22, $00, $00, $00, $00, $00, $00
 spritehorzexpand:   .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritevertexpand:   .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite frame meta data
-framecounter:       .byte   $05
+framecounter:       .byte   $0a
 spriteuframebegin:  .byte   $22, $22, $00, $00, $00, $00, $00, $00
 spriteuframeend:    .byte   $23, $23, $00, $00, $00, $00, $00, $00
 spritedframebegin:  .byte   $24, $24, $00, $00, $00, $00, $00, $00
