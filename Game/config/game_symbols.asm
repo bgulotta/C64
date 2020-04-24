@@ -29,7 +29,7 @@ spritehorzexpand:   .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritevertexpand:   .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite frame meta data
-framecounter:       .byte   $0a
+framecounter:       .byte   $05
 spriteuframebegin:  .byte   $22, $00, $00, $00, $00, $00, $00, $00
 spriteuframeend:    .byte   $23, $00, $00, $00, $00, $00, $00, $00
 spritedframebegin:  .byte   $24, $00, $00, $00, $00, $00, $00, $00
@@ -40,11 +40,11 @@ spriterframebegin:  .byte   $24, $00, $00, $00, $00, $00, $00, $00
 spriterframeend:    .byte   $25, $00, $00, $00, $00, $00, $00, $00
 
 // sprite frame offsets
-spriteoffsetx1:     .byte   $00, $02, $00, $00, $00, $00, $00, $00 
+spriteoffsetx1:     .byte   $04, $02, $00, $00, $00, $00, $00, $00 
 spriteoffsetx2:     .byte   $0c, $0e, $00, $00, $00, $00, $00, $00
 spriteoffsety1:     .byte   $02, $05, $00, $00, $00, $00, $00, $00
 spriteoffsety2:     .byte   $10, $0f, $00, $00, $00, $00, $00, $00
-                      
+
 // sprite color data
 spritecolormenable: .byte   $01, $01, $00, $00, $00, $00, $00, $00
 spritecolor:        .byte   $07, $0e, $00, $00, $00, $00, $00, $00
@@ -52,8 +52,8 @@ spritecolormulti1:  .byte   $01
 spritecolormulti2:  .byte   $00
 
 // sprite locations and other attributes
-spritex:            .byte   $7D, $80, $00, $00, $00, $00, $00, $00
-spritey:            .byte   $48, $48, $00, $00, $00, $00, $00, $00
+spritex:            .byte   $40, $80, $00, $00, $00, $00, $00, $00
+spritey:            .byte   $38, $48, $00, $00, $00, $00, $00, $00
 spritemsb:          .byte   $00, $00, $00, $00, $00, $00, $00, $00
 
 // sprite hit boxes
@@ -78,8 +78,8 @@ spritemovementspd:  .byte   $01, $00, $00, $00, $00, $00, $00, $00
 spritejumpdistcov:  .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritejumpdist:     .byte   $1e, $00, $00, $00, $00, $00, $00, $00
 spritejumpspeed:    .byte   $00, $00, $00, $00, $00, $00, $00, $00
-spriteinitialjs:    .byte   $02, $00, $00, $00, $00, $00, $00, $00
-spritefallspeed:    .byte   $01, $01, $00, $00, $00, $00, $00, $00
+spriteinitialjs:    .byte   $06, $00, $00, $00, $00, $00, $00, $00
+spritefallspeed:    .byte   $04, $01, $00, $00, $00, $00, $00, $00
 
 // sprite collision attributes
 spritecollisionspr:  .byte  $00, $00, $00, $00, $00, $00, $00, $00

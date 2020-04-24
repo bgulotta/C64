@@ -285,6 +285,15 @@ iny
 lda spritecol2, x
 sta (zero_page1), y
 
+jsr zp_screen_pointer_next_row
+ldy #25
+lda spritemsb1, x
+sta (zero_page1), y
+iny 
+iny
+lda spritemsb2, x
+sta (zero_page1), y
+
 jmp next_sprite
 }
 /*

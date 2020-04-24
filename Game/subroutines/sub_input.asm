@@ -55,12 +55,12 @@ move_right:
     bit spritemovement
     beq input_exit
     lda #right
-    sta spritedirection    
+    sta spritedirection
     clc 
     lda spritex
     adc spritemovementspd
     sta spritex
-    beq toggle_msb
+    bcs toggle_msb
     rts
 move_left:
     bit spritemovement

@@ -234,7 +234,7 @@ check_left_collision:
             lda spritex, x
             adc spritemovementspd, x
             sta spritex, x 
-            beq hlc_toggle_msb
+            bcs hlc_toggle_msb
             rts
         hlc_toggle_msb:
             lda spritemsb, x
