@@ -215,7 +215,7 @@ check_left_collision:
             rts
         hlc_solid:
             jsr hlc_move_sprite_right
-            jsr hlc_disable_move_left
+            //jsr hlc_disable_move_left
             rts
         hlc_semi_solid:
             rts
@@ -292,7 +292,7 @@ check_right_collision:
             rts
         hrc_solid:
             jsr hrc_move_sprite_left
-            jsr hrc_disable_move_right
+            //jsr hrc_disable_move_right
             rts
         hrc_semi_solid:
             rts

@@ -143,6 +143,24 @@ csa_check_fall:
     and #down
     bne csa_next_sprite
 csa_fall:
+    csa_enable_jumping:
+
+    // turn jumping back on as we are falling
+    cpx #$00
+    bne csa_enable_jumping_do
+    lda #jump
+    bit cia_port_a
+    beq csa_continue_fall            
+    csa_enable_jumping_do:
+        lda #$00
+        sta spritejumpdistcov, x
+        lda spriteinitialjs, x
+        sta spritejumpspeed, x
+        lda spritemovement, x
+        ora #jump 
+        sta spritemovement, x
+
+    csa_continue_fall:           
     // continue falling
     lda spritey, x
     clc
