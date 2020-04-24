@@ -72,6 +72,16 @@ move_sprites_loop:
     cmp #$01
     rol vic_spr_xpos_msb
 
+    // set sprite vert double
+    lda spritevertexpand, x
+    cmp #$01
+    rol vic_spr_vert_exp
+
+    // set sprite horz double
+    lda spritehorzexpand, x
+    cmp #$01
+    rol vic_spr_horz_exp
+
     // update sprite pointer with any changes
     lda spritepointer, x
     sta (zero_page1), y

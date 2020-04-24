@@ -13,6 +13,7 @@ update_sprite_frame:
         // are we finished with all sprites?
         cpx #$08
         bcc usf_loop
+    usf_done:
         rts
     usf_loop:
         // is this sprite on?
@@ -24,6 +25,10 @@ update_sprite_frame:
         beq usf_left
         cmp #right
         beq usf_right
+        cmp #up
+        /*beq usf_up
+        cmp #down
+        beq usf_down*/
         jmp usf_next_sprite
 
         usf_left:
@@ -58,5 +63,34 @@ update_sprite_frame:
                 sta spritepointer, x
                 jmp usf_next_sprite
 
-    usf_done:
-    rts
+        /*usf_up:
+            lda spritepointer, x
+            cmp spriteuframeend, x
+            beq usf_up_reset
+            bcc usf_up_next
+            jmp usf_up_reset
+            usf_up_next:
+                cmp spriteuframebegin, x
+                bcc usf_up_reset
+                inc spritepointer, x                
+                jmp usf_next_sprite          
+            usf_up_reset:
+                lda spriteuframebegin, x
+                sta spritepointer, x
+                jmp usf_next_sprite
+
+        usf_down:
+            lda spritepointer, x
+            cmp spritedframeend, x
+            beq usf_down_reset
+            bcc usf_down_next
+            jmp usf_down_reset
+            usf_down_next:
+                cmp spritedframebegin, x
+                bcc usf_down_reset
+                inc spritepointer, x                
+                jmp usf_next_sprite          
+            usf_down_reset:
+                lda spritedframebegin, x
+                sta spritepointer, x
+                jmp usf_next_sprite*/
