@@ -23,7 +23,7 @@
 .enum { up=$01, down=$02, left=$04, right=$08, jump=$10 }
 
 *=sprite_meta "Sprite Meta"
-spriteon:           .byte   $01, $01, $00, $00, $00, $00, $00, $00
+spriteon:           .byte   $01, $00, $00, $00, $00, $00, $00, $00
 spritepointer:      .byte   $22, $22, $00, $00, $00, $00, $00, $00
 spritehorzexpand:   .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritevertexpand:   .byte   $00, $00, $00, $00, $00, $00, $00, $00
@@ -82,17 +82,18 @@ spriteinitialjs:    .byte   $04, $04, $00, $00, $00, $00, $00, $00
 spritefallspeed:    .byte   $01, $01, $00, $00, $00, $00, $00, $00
 
 // sprite collision attributes
-spritecollisionspr:  .byte  $00, $00, $00, $00, $00, $00, $00, $00
-spritecollisiondir:  .byte  $00, $00, $00, $00, $00, $00, $00, $00 // bit 0 above, bit 1 below, bit 2 left, bit 3 right collision
-spritecollisionup:   .byte  $00, $00, $00, $00, $00, $00, $00, $00
-spritecollisiondown: .byte  $00, $00, $00, $00, $00, $00, $00, $00
-spritecollisionleft: .byte  $00, $00, $00, $00, $00, $00, $00, $00
-spritecollisionright: .byte $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisionspr:   .byte  $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisiondir:   .byte  $00, $00, $00, $00, $00, $00, $00, $00 // bit 0 above, bit 1 below, bit 2 left, bit 3 right collision
+spritecollisionup:    .byte  $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisiondown:  .byte  $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisionleft:  .byte  $00, $00, $00, $00, $00, $00, $00, $00
+spritecollisionright: .byte  $00, $00, $00, $00, $00, $00, $00, $00
 
 // looping / math 
+score1:              .byte $00, $00, $00
+score2:              .byte $00, $00, $00
 bits:                .byte $01, $02, $04, $08, $10, $20, $40, $80
-
-arithmetic_value:   .byte   $00, $00
+arithmetic_value:    .byte $00, $00
 num1:               .byte   $00
 num2:               .byte   $00
 num3:               .byte   $00

@@ -11,6 +11,7 @@ main:
     jsr setup_sprites
     jsr setup_irq
 check_stop:
+    jsr open_borders
     jsr $FFE1
     beq exit
     jmp check_stop
@@ -38,3 +39,4 @@ exit:
 #import "subroutines/sub_title_screen.asm"
 #import "subroutines/sub_setup_vic.asm"
 #import "subroutines/sub_setup_irq.asm"
+#import "subroutines/sub_borders.asm"

@@ -56,6 +56,7 @@ reset_irq:
 // custom interrupt routine
 irq:
     //jsr color_wash
+    inc vic_bdr_color
     jsr check_player1_input
     jsr check_player2_input
     jsr check_sprite_airborne
@@ -66,6 +67,7 @@ irq:
     jsr respond_char_collision
     jsr update_sprite_frame
     jsr move_sprites
+    dec vic_bdr_color
     //jsr debug_output
 
     // acknowledge the raster interrupt

@@ -83,7 +83,7 @@ move_sprites_loop:
     beq turn_on_bit
     turn_off_bit:
         lda bits, x
-        eor #$FF 
+        eor #$ff 
         sta num1
         lda vic_spr_xpos_msb         
         and num1
@@ -201,110 +201,104 @@ csa_exit:
     the sprite offset data. It then calculates the character
     row and columns touched by the sprite
 */
-update_sprite_hitbox_done:
-rts
 update_sprite_hitbox:
-ldx #$ff
-ush_loop:
-inx
-cpx #$07
-beq update_sprite_hitbox_done
-
-// is this sprite on?
-lda spriteon, x
-beq ush_loop
-
-// set x1
-lda spritex, x
-clc
-adc spriteoffsetx1, x
-sta spritex1, x
-lda spritemsb, x
-adc #$00
-sta spritemsb1,x
-
-// set col1
-sec
-lda spritex1, x     
-sbc #screen_xoffset   
-sta arithmetic_value + 1
-lda spritemsb1, x 
-sbc #$00
-sta arithmetic_value
-
-jsr divide_by_8
-lda arithmetic_value + 1
-cmp #screen_cols_oob
-bcc ush_store_col1
-lda #$00
-ush_store_col1:
-    sta spritecol1, x
-
-// set x2
-lda spritex1, x
-clc
-adc spriteoffsetx2, x
-sta spritex2, x
-lda spritemsb1, x
-adc #$00
-sta spritemsb2,x
-
-// sprite col2
-sec
-lda spritex2, x      
-sbc #screen_xoffset  
-sta arithmetic_value + 1
-lda spritemsb2, x
-sbc #$00
-sta arithmetic_value
-
-jsr divide_by_8
-lda arithmetic_value + 1
-cmp #screen_cols_oob
-bcc ush_store_col2
-lda #$00
-ush_store_col2:
-    sta spritecol2, x
-
-// set y1 & y2
-lda spritey, x
-clc
-adc spriteoffsety1, x
-sta spritey1, x
-adc spriteoffsety2, x
-sta spritey2, x
-
-// sprite row1
-sec
-lda spritey1, x     
-sbc #screen_yoffset   
-sta arithmetic_value + 1
-lda #$00
-sta arithmetic_value
-
-jsr divide_by_8
-lda arithmetic_value + 1
-cmp #screen_rows_oob
-bcc ush_store_row1
-lda #$00
-ush_store_row1:
-    sta spriterow1, x
-
-// sprite row2
-sec
-lda spritey2, x      
-sbc #screen_yoffset   
-sta arithmetic_value + 1
-lda #0
-sta arithmetic_value
-
-jsr divide_by_8
-lda arithmetic_value + 1
-cmp #screen_rows_oob
-bcc ush_store_row2
-lda #$00
-ush_store_row2:
-    sta spriterow2, x
-
-jmp ush_loop
-rts
+    ldx #$ff
+    ush_loop:
+        inx
+        cpx #$07
+        bne ush_check_sprite_on
+        rts
+    ush_check_sprite_on:
+        // is this sprite on?
+        lda spriteon, x
+        beq ush_loop
+    ush_x1:
+        // set x1
+        lda spritex, x
+        clc
+        adc spriteoffsetx1, x
+        sta spritex1, x
+        lda spritemsb, x
+        adc #$00
+        sta spritemsb1,x
+    ush_col1:
+        // set col1
+        sec
+        lda spritex1, x     
+        sbc #screen_xoffset   
+        sta arithmetic_value + 1
+        lda spritemsb1, x 
+        sbc #$00
+        sta arithmetic_value
+        jsr divide_by_8
+        lda arithmetic_value + 1
+        cmp #screen_cols_oob
+        bcc ush_col1_set
+        lda #$00
+    ush_col1_set:
+        sta spritecol1, x
+    ush_x2:
+        // set x2
+        lda spritex1, x
+        clc
+        adc spriteoffsetx2, x
+        sta spritex2, x
+        lda spritemsb1, x
+        adc #$00
+        sta spritemsb2,x
+    ush_col2:
+        // sprite col2
+        sec
+        lda spritex2, x      
+        sbc #screen_xoffset  
+        sta arithmetic_value + 1
+        lda spritemsb2, x
+        sbc #$00
+        sta arithmetic_value
+        jsr divide_by_8
+        lda arithmetic_value + 1
+        cmp #screen_cols_oob
+        bcc ush_col2_set
+        lda #$00
+    ush_col2_set:
+        sta spritecol2, x
+    ush_y1:
+        // set y1 & y2
+        lda spritey, x
+        clc
+        adc spriteoffsety1, x
+        sta spritey1, x
+    ush_y2:
+        adc spriteoffsety2, x
+        sta spritey2, x
+    ush_row1:
+        // sprite row1
+        sec
+        lda spritey1, x     
+        sbc #screen_yoffset   
+        sta arithmetic_value + 1
+        lda #$00
+        sta arithmetic_value
+        jsr divide_by_8
+        lda arithmetic_value + 1
+        cmp #screen_rows_oob
+        bcc ush_row1_set
+        lda #$00
+    ush_row1_set:
+        sta spriterow1, x
+    ush_row2:
+        // sprite row2
+        sec
+        lda spritey2, x      
+        sbc #screen_yoffset   
+        sta arithmetic_value + 1
+        lda #0
+        sta arithmetic_value
+        jsr divide_by_8
+        lda arithmetic_value + 1
+        cmp #screen_rows_oob
+        bcc ush_row2_set
+        lda #$00
+    ush_row2_set:
+        sta spriterow2, x
+        jmp ush_loop
