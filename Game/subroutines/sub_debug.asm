@@ -24,13 +24,14 @@ draw_map_done:
 rts
 
 debug_output:
+
 DrawRowColInfo()
 draw_row_col_info_done:
 //DrawCharBoundaries()
 draw_char_bounadaries_done:
-DrawMovementInfo()
+//DrawMovementInfo()
 draw_movement_info_done:
-DrawCollisionInfo()
+//DrawCollisionInfo()
 draw_collision_info_done:
 rts
 

@@ -1,11 +1,11 @@
 #importonce
 #import "../subroutines/sub_sprites.asm"
-//#import "../subroutines/color_wash.asm"
 #import "../subroutines/sub_input.asm"
 #import "../subroutines/sub_collision_detect.asm"
 #import "../subroutines/sub_collision_respond.asm"
 #import "../subroutines/sub_debug.asm"
 #import "../subroutines/sub_animation.asm"
+#import "../subroutines/sub_display_score.asm"
 
 setup_irq:
     sei
@@ -66,6 +66,7 @@ irq:
     jsr respond_sprite_collision
     jsr respond_char_collision
     jsr update_sprite_frame
+    jsr display_scores
     jsr move_sprites
     dec vic_bdr_color
     //jsr debug_output

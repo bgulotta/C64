@@ -37,8 +37,23 @@ sbc spritemsb2
 bcs dsc_next_sprite // b.left >= a.right
 
 dsc_sprite_collision:
+
 // TODO: set sprite to sprite collision meta data
-inc vic_bdr_color
+sed
+clc 
+lda scores
+adc #$10
+sta scores
+bcc update_score_done
+lda scores + 1
+adc #$00
+sta scores + 1
+bcc update_score_done
+lda scores + 2
+adc #$00
+sta scores + 2
+update_score_done:
+cld
 
 dsc_next_sprite:
 inx

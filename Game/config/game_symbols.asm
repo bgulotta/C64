@@ -4,8 +4,8 @@
 .const irq_beg_sav      = $03a0
 .const irq_end_sav      = $03a1
 .const sprite_data      = $0880
-.const sprite_meta      = $3000
-.const subroutines      = $2200        
+.const sprite_meta      = $2200
+.const subroutines      = $3000        
 .const zero_page1       = $fc
 .const zero_page2       = $fe
 .const screen_cols      = 40
@@ -23,7 +23,7 @@
 .enum { up=$01, down=$02, left=$04, right=$08, jump=$10 }
 
 *=sprite_meta "Sprite Meta"
-spriteon:           .byte   $01, $00, $00, $00, $00, $00, $00, $00
+spriteon:           .byte   $01, $01, $00, $00, $00, $00, $00, $00
 spritepointer:      .byte   $22, $22, $00, $00, $00, $00, $00, $00
 spritehorzexpand:   .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritevertexpand:   .byte   $00, $00, $00, $00, $00, $00, $00, $00
@@ -90,11 +90,10 @@ spritecollisionleft:  .byte  $00, $00, $00, $00, $00, $00, $00, $00
 spritecollisionright: .byte  $00, $00, $00, $00, $00, $00, $00, $00
 
 // looping / math 
-score1:              .byte $00, $00, $00
-score2:              .byte $00, $00, $00
-bits:                .byte $01, $02, $04, $08, $10, $20, $40, $80
-arithmetic_value:    .byte $00, $00
-num1:               .byte   $00
-num2:               .byte   $00
-num3:               .byte   $00
-num4:               .byte   $00
+scores:               .byte $00, $00, $00, $00, $00, $00
+bits:                 .byte $01, $02, $04, $08, $10, $20, $40, $80
+arithmetic_value:     .byte $00, $00
+num1:                 .byte $00
+num2:                 .byte $00
+num3:                 .byte $00
+num4:                 .byte $00
