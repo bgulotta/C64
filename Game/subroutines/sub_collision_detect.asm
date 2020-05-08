@@ -7,59 +7,79 @@
     meta data for collision routine to respond accordingly
 */
 detect_sprite_collision:
-ldx #1
-dsc_loop:
-// is this sprite on?
-lda spriteon, x
-beq dsc_next_sprite
-//y_overlaps = (a.top < b.bottom) && (a.bottom > b.top)
-lda spritey1     
-cmp spritey2, x  
-bcs dsc_next_sprite // a.top >= b.bottom
-
-lda spritey1, x          
-cmp spritey2        
-bcs dsc_next_sprite // b.top >= a.bottom
-
-//x_overlaps = (a.left < b.right) && (a.right > b.left)
-sec
-lda spritex1      
-sbc spritex2, x   
-lda spritemsb1    
-sbc spritemsb2, x 
-bcs dsc_next_sprite // a.left >= b.right
-
-sec
-lda spritex1, x         
-sbc spritex2       
-lda spritemsb1, x  
-sbc spritemsb2      
-bcs dsc_next_sprite // b.left >= a.right
-
-dsc_sprite_collision:
-
-// TODO: set sprite to sprite collision meta data
-sed
-clc 
-lda scores
-adc #$10
-sta scores
-bcc update_score_done
-lda scores + 1
-adc #$00
-sta scores + 1
-bcc update_score_done
-lda scores + 2
-adc #$00
-sta scores + 2
-update_score_done:
-cld
-
+    ldy #0
+dsc_outer_loop:
+    ldx #2
+dsc_inner_loop:
+    // is this sprite on?
+    lda spriteon, x
+    beq dsc_next_sprite
+    //y_overlaps = (a.top < b.bottom) && (a.bottom > b.top)
+    lda spritey1, y     
+    cmp spritey2, x  
+    bcs dsc_next_sprite // a.top >= b.bottom
+    lda spritey1, x          
+    cmp spritey2, y        
+    bcs dsc_next_sprite // b.top >= a.bottom
+    //x_overlaps = (a.left < b.right) && (a.right > b.left)
+    sec
+    lda spritex1, y      
+    sbc spritex2, x   
+    lda spritemsb1, y    
+    sbc spritemsb2, x 
+    bcs dsc_next_sprite // a.left >= b.right
+    sec
+    lda spritex1, x         
+    sbc spritex2, y       
+    lda spritemsb1, x  
+    sbc spritemsb2, y      
+    bcs dsc_next_sprite // b.left >= a.right
+    jsr dsc_sprite_collision
 dsc_next_sprite:
-inx
-cpx #9
-bcc dsc_loop
-rts
+    inx
+    cpx #$09
+    bcc dsc_inner_loop
+    iny 
+    cpy #$02
+    bcc dsc_outer_loop
+    rts
+dsc_sprite_collision:
+    // TODO: set sprite to sprite collision meta data
+    // move this to sprite collision response routine
+    cpy #$00
+    beq dsc_player1
+dsc_player2:
+    sed
+    clc 
+    lda scores + 3
+    adc #$10
+    sta scores + 3
+    bcc update_score_done
+    lda scores + 4
+    adc #$00
+    sta scores + 4
+    bcc update_score_done
+    lda scores + 5
+    adc #$00
+    sta scores + 5
+    jmp update_score_done
+dsc_player1:
+    sed
+    clc 
+    lda scores
+    adc #$10
+    sta scores
+    bcc update_score_done
+    lda scores + 1
+    adc #$00
+    sta scores + 1
+    bcc update_score_done
+    lda scores + 2
+    adc #$00
+    sta scores + 2
+update_score_done:
+    cld
+    rts
 
 /* 
     This routine checks for sprite to character collisions and sets appropriate
