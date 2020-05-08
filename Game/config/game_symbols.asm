@@ -23,7 +23,7 @@
 .enum { up=$01, down=$02, left=$04, right=$08, jump=$10 }
 
 *=sprite_meta "Sprite Meta"
-spriteon:           .byte   $01, $01, $01, $00, $00, $00, $00, $00
+spriteon:           .byte   $01, $00, $01, $00, $00, $00, $00, $00
 spritepointer:      .byte   $22, $22, $26, $29, $30, $00, $00, $00
 spritehorzexpand:   .byte   $00, $00, $00, $00, $00, $00, $00, $00
 spritevertexpand:   .byte   $00, $00, $00, $00, $00, $00, $00, $00

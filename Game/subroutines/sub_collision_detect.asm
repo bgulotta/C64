@@ -11,7 +11,10 @@ detect_sprite_collision:
 dsc_outer_loop:
     ldx #2
 dsc_inner_loop:
-    // is this sprite on?
+    // is the player sprite on?
+    lda spriteon, y
+    beq dsc_next_sprite
+    // is the non player sprite on?
     lda spriteon, x
     beq dsc_next_sprite
     //y_overlaps = (a.top < b.bottom) && (a.bottom > b.top)
