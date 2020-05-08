@@ -58,7 +58,7 @@ cld
 dsc_next_sprite:
 inx
 cpx #9
-bcs dsc_loop
+bcc dsc_loop
 rts
 
 /* 

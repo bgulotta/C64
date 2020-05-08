@@ -25,7 +25,7 @@ rts
 
 debug_output:
 
-DrawRowColInfo()
+//DrawRowColInfo()
 draw_row_col_info_done:
 //DrawCharBoundaries()
 draw_char_bounadaries_done:
