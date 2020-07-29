@@ -4,6 +4,9 @@ BasicUpstart2(main)
 *=$c000 "Application"
 
 main:   
+    //jsr INIT_IO
+    //jsr BUF_DIF
+    //beq main
     jsr setup_vic_memory
     jsr init_screen
     jsr init_title_screen
@@ -27,6 +30,7 @@ exit:
 #import "resources/sprite/data.asm"
 
 *=subroutines "Subroutines"
+#import "subroutines/sub_io.asm"
 #import "subroutines/sub_zero_page.asm"
 #import "subroutines/sub_clear_screen.asm"
 #import "subroutines/sub_title_screen.asm"

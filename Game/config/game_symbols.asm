@@ -1,6 +1,11 @@
 #importonce
 #import "../resources/strings.asm"
 
+.const IO_RPTR        = $3e00; // read pointer into IOBUF 
+.const IO_WPTR        = $3e01; // write pointer into IOBUF
+/* 256 Byte IO Buffer */ 
+.const IO_BUF          = $3f00 // a wrapping buffer of 256 bytes to process IO
+
 .const irq_beg_sav      = $03a0
 .const irq_end_sav      = $03a1
 .const sprite_data      = $0880
